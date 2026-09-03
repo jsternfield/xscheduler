@@ -685,36 +685,40 @@
 	  }
 	
 	  function getZoneCoords(zoneId) {
-	    const el = document.getElementById(`zone-${zoneId}`);
-	    if (!el) return null;
-	
-	    const left = parseFloat(el.style.left);
-	    const top = parseFloat(el.style.top);
-	    const width = parseFloat(el.style.width);
-	    const height = parseFloat(el.style.height);
-	
-	    return {
-	      x: left + (width / 2),
-	      y: top + (height / 2),
-	      scale: DEFAULT_SCALE
-	    };
-	  }
+		  const el = document.getElementById(`zone-${zoneId}`);
+		  if (!el) return null;
+		
+		  // Use relative percentage coordinates from CSS
+		  const left = parseFloat(el.style.left);
+		  const top = parseFloat(el.style.top);
+		  const width = parseFloat(el.style.width);
+		  const height = parseFloat(el.style.height);
+		
+		  return {
+		    x: left + (width / 2),
+		    y: top + (height / 2),
+		    scale: DEFAULT_SCALE
+		  };
+		}
 	
 	  function applyMapTransform(percentX, percentY, targetScale) {
-	    const stageWidth = mapStage.offsetWidth;
-	    const stageHeight = mapStage.offsetHeight;
-	    const wrapperWidth = mapWrapper.clientWidth;
-	    const wrapperHeight = mapWrapper.clientHeight;
-	
-	    const targetX = (percentX / 100) * stageWidth;
-	    const targetY = (percentY / 100) * stageHeight;
-	
-	    scale = targetScale;
-	    panX = (wrapperWidth / 2) - targetX;
-	    panY = (wrapperHeight / 2) - targetY;
-	
-	    applyTransform();
-	  }
+		  const wrapperWidth = mapWrapper.clientWidth;
+		  const wrapperHeight = mapWrapper.clientHeight;
+		  const stageWidth = mapStage.offsetWidth;
+		  const stageHeight = mapStage.offsetHeight;
+		
+		  scale = targetScale;
+		
+		  // Calculate target position in unscaled stage pixels
+		  const targetX = (percentX / 100) * stageWidth;
+		  const targetY = (percentY / 100) * stageHeight;
+		
+		  // Calculate pan needed to center the target point under scale
+		  panX = (wrapperWidth / 2) - (targetX * scale);
+		  panY = (wrapperHeight / 2) - (targetY * scale);
+		
+		  applyTransform();
+		}
 	
 	  function zoomToZone(zoneId) {
 	    const coords = getZoneCoords(zoneId);
