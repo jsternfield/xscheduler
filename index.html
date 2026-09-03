@@ -266,18 +266,76 @@
       font-weight: bold;
       font-size: 0.8rem;
     }
+
+	  /* Dropdown Container */
+	.dropdown {
+	  position: relative;
+	  display: inline-block;
+	}
+	
+	/* Dropdown Menu Box */
+	.dropdown-content {
+	  display: none;
+	  position: absolute;
+	  top: 100%;
+	  left: 0;
+	  background-color: var(--card-bg);
+	  min-width: 150px;
+	  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.6);
+	  border: 1px solid var(--border-color);
+	  border-radius: 6px;
+	  z-index: 20;
+	  margin-top: 4px;
+	  overflow: hidden;
+	}
+	
+	/* Dropdown Item Links */
+	.dropdown-content a {
+	  color: var(--text-main);
+	  padding: 10px 14px;
+	  text-decoration: none;
+	  display: block;
+	  font-size: 0.85rem;
+	  font-weight: 500;
+	  transition: background-color 0.2s ease;
+	}
+	
+	.dropdown-content a:hover {
+	  background-color: var(--accent-blue);
+	  color: #000;
+	}
+	
+	/* Display on Hover */
+	.dropdown:hover .dropdown-content {
+	  display: block;
+	}
+	
+	/* Highlight Parent Button when Active/Hovered */
+	.dropdown:hover .dropdown-btn {
+	  border-color: var(--accent-blue);
+	  color: var(--accent-blue);
+	}
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Blizzcon 2026</h1>
-    <div class="tab-container">
-      <button class="tab-button active" onclick="switchTab('day1', this)">Day 1 (Sat, Sep 12)</button>
-      <button class="tab-button" onclick="switchTab('day2', this)">Day 2 (Sun, Sep 13)</button>
-																									
+  <h1>Blizzcon 2026</h1>
+  <div class="tab-container">
+    <button class="tab-button active" onclick="switchTab('day1', this)">Day 1 (Sat, Sep 12)</button>
+    <button class="tab-button" onclick="switchTab('day2', this)">Day 2 (Sun, Sep 13)</button>
+    
+    <!-- Other Dropdown Tab -->
+    <div class="dropdown">
+      <button class="tab-button dropdown-btn">Other &#9662;</button>
+      <div class="dropdown-content">
+        <a href="#" onclick="zoomToZone('cosplay'); return false;">Cosplay</a>
+        <a href="#" onclick="zoomToZone('merch'); return false;">Merch Store</a>
+        <a href="#" onclick="zoomToZone('restroom'); return false;">Restroom</a>
+      </div>
     </div>
-  </header>
+  </div>
+</header>
 
   <div class="main-layout">
     <!-- TOP 2/3 SCHEDULE AREA -->
@@ -594,6 +652,9 @@
             <div class="map-box" id="zone-hall-a" style="top: 17%; left: 43%; width: 12%; height: 27%;"></div>
             <div class="map-box" id="zone-arena" style="top: 21%; left: 62%; width: 15%; height: 26%;"></div>
             <div class="map-box" id="zone-legends" style="top: 8%; left: 53%; width: 11%; height: 16%;"></div>
+			<div class="map-box" id="zone-cosplay" style="top: 72%; left: 16%; width: 9%; height: 12%;"></div>
+			<div class="map-box" id="zone-merch" style="top: 42%; left: 78%; width: 14%; height: 16%;"></div>
+			<div class="map-box" id="zone-restroom" style="top: 10%; left: 81%; width: 6%; height: 8%;"></div>
           </div>
         </div>
       </div>
@@ -611,7 +672,11 @@
       'hall-b':  { x: 37, y: 36, scale: 2.5 },
       'hall-a':  { x: 49, y: 30, scale: 2.5 },
       'arena':   { x: 69.5, y: 34, scale: 2.5 },
-      'legends': { x: 58.5, y: 16, scale: 2.8 }
+      'legends': { x: 58.5, y: 16, scale: 2.8 },
+		// Additional POIs
+	  'cosplay':  { x: 20, y: 78, scale: 3.0 },
+	  'merch':    { x: 85, y: 50, scale: 2.5 },
+	  'restroom': { x: 84, y: 14, scale: 3.2 }
     };
 
     function switchTab(tabId, btn) {
