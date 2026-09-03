@@ -666,162 +666,181 @@
   </div>
 
   <script>
-    const DEFAULT_SCALE = 2.5;
-
-	function getZoneCoords(zoneId) {
-	  const el = document.getElementById(`zone-${zoneId}`);
-	  if (!el) return null;
+	  const DEFAULT_SCALE = 2.5;
 	
-	  // Read percentage values from inline CSS or computed styles
-	  const left = parseFloat(el.style.left);
-	  const top = parseFloat(el.style.top);
-	  const width = parseFloat(el.style.width);
-	  const height = parseFloat(el.style.height);
+	  // Map Pan/Zoom State
+	  let scale = 1;
+	  let panX = 0;
+	  let panY = 0;
+	  let isDragging = false;
+	  let startX = 0;
+	  let startY = 0;
+	  let initialPinchDistance = null;
 	
-	  return {
-	    x: left + (width / 2),
-	    y: top + (height / 2),
-	    scale: DEFAULT_SCALE
-	  };
-	}
-    function switchTab(tabId, btn) {
-      document.querySelectorAll('.table-wrapper').forEach(content => {
-        content.classList.remove('active');
-      });
-      document.querySelectorAll('.tab-button').forEach(button => {
-        button.classList.remove('active');
-      });
-      
-      document.getElementById(tabId).classList.add('active');
-      btn.classList.add('active');
-    }
-
-    document.querySelectorAll('.event-cell').forEach(cell => {
-      cell.addEventListener('click', function() {
-        const colIndex = this.cellIndex;
-        const table = this.closest('table');
-        const headerCell = table.querySelectorAll('thead th')[colIndex];
-        const zoneKey = headerCell.getAttribute('data-zone');
-
-        if (zoneKey && zoneCoords[zoneKey]) {
-																
-								   
-          zoomToZone(zoneKey);
-        }
-      });
-    });
-
-    // Map Pan/Zoom State
-    let scale = 1;
-    let panX = 0;
-    let panY = 0;
-    let isDragging = false;
-    let startX = 0;
-    let startY = 0;
-    let initialPinchDistance = null;
-
-    const mapStage = document.getElementById('map-stage');
-    const mapWrapper = document.getElementById('map');
-
-    function applyTransform() {
-      mapStage.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
-    }
-
-    function zoomToZone(zoneId) {
-	  const coords = getZoneCoords(zoneId);
-	  if (!coords) return;
+	  const mapStage = document.getElementById('map-stage');
+	  const mapWrapper = document.getElementById('map');
 	
-	  // Use coords.x, coords.y, and coords.scale to transform your camera/map
-	  applyMapTransform(coords.x, coords.y, coords.scale);
-	}
+	  function applyTransform() {
+	    mapStage.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+	  }
 	
-    function resetMapZoom() {
-      scale = 1;
-      panX = 0;
-      panY = 0;
-      document.querySelectorAll('.map-box').forEach(box => box.classList.remove('active'));
-      applyTransform();
-    }
-
-    // Mouse Dragging
-    mapWrapper.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      startX = e.clientX - panX;
-      startY = e.clientY - panY;
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      panX = e.clientX - startX;
-      panY = e.clientY - startY;
-      applyTransform();
-    });
-
-    window.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
-
-    // Mouse Wheel Zooming
-    mapWrapper.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      const zoomFactor = e.deltaY < 0 ? 1.15 : 0.85;
-      const newScale = Math.min(Math.max(1, scale * zoomFactor), 5);
-
-      const rect = mapWrapper.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-
-      panX = mouseX - (mouseX - panX) * (newScale / scale);
-      panY = mouseY - (mouseY - panY) * (newScale / scale);
-      scale = newScale;
-
-      applyTransform();
-    }, { passive: false });
-
-    // Touch Support (Tap Drag & Pinch Zoom)
-    function getDistance(touches) {
-      const dx = touches[0].clientX - touches[1].clientX;
-      const dy = touches[0].clientY - touches[1].clientY;
-      return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    mapWrapper.addEventListener('touchstart', (e) => {
-      if (e.touches.length === 1) {
-        isDragging = true;
-        startX = e.touches[0].clientX - panX;
-        startY = e.touches[0].clientY - panY;
-      } else if (e.touches.length === 2) {
-        isDragging = false;
-        initialPinchDistance = getDistance(e.touches);
-      }
-    });
-
-    mapWrapper.addEventListener('touchmove', (e) => {
-      if (e.touches.length === 1 && isDragging) {
-        panX = e.touches[0].clientX - startX;
-        panY = e.touches[0].clientY - startY;
-        applyTransform();
-      } else if (e.touches.length === 2 && initialPinchDistance) {
-        const currentDistance = getDistance(e.touches);
-        const zoomFactor = currentDistance / initialPinchDistance;
-        const newScale = Math.min(Math.max(1, scale * zoomFactor), 5);
-
-        const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-        const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-
-        panX = midX - (midX - panX) * (newScale / scale);
-        panY = midY - (midY - panY) * (newScale / scale);
-        scale = newScale;
-        initialPinchDistance = currentDistance;
-
-        applyTransform();
-      }
-    });
-
-    mapWrapper.addEventListener('touchend', () => {
-      isDragging = false;
-      initialPinchDistance = null;
-    });
-  </script>
+	  function getZoneCoords(zoneId) {
+	    const el = document.getElementById(`zone-${zoneId}`);
+	    if (!el) return null;
+	
+	    const left = parseFloat(el.style.left);
+	    const top = parseFloat(el.style.top);
+	    const width = parseFloat(el.style.width);
+	    const height = parseFloat(el.style.height);
+	
+	    return {
+	      x: left + (width / 2),
+	      y: top + (height / 2),
+	      scale: DEFAULT_SCALE
+	    };
+	  }
+	
+	  function applyMapTransform(percentX, percentY, targetScale) {
+	    const stageWidth = mapStage.offsetWidth;
+	    const stageHeight = mapStage.offsetHeight;
+	    const wrapperWidth = mapWrapper.clientWidth;
+	    const wrapperHeight = mapWrapper.clientHeight;
+	
+	    const targetX = (percentX / 100) * stageWidth;
+	    const targetY = (percentY / 100) * stageHeight;
+	
+	    scale = targetScale;
+	    panX = (wrapperWidth / 2) - targetX;
+	    panY = (wrapperHeight / 2) - targetY;
+	
+	    applyTransform();
+	  }
+	
+	  function zoomToZone(zoneId) {
+	    const coords = getZoneCoords(zoneId);
+	    if (!coords) return;
+	
+	    // Highlight the active zone box
+	    document.querySelectorAll('.map-box').forEach(box => box.classList.remove('active'));
+	    const targetBox = document.getElementById(`zone-${zoneId}`);
+	    if (targetBox) targetBox.classList.add('active');
+	
+	    applyMapTransform(coords.x, coords.y, coords.scale);
+	  }
+	
+	  function switchTab(tabId, btn) {
+	    document.querySelectorAll('.table-wrapper').forEach(content => {
+	      content.classList.remove('active');
+	    });
+	    document.querySelectorAll('.tab-button').forEach(button => {
+	      button.classList.remove('active');
+	    });
+	
+	    document.getElementById(tabId).classList.add('active');
+	    btn.classList.add('active');
+	  }
+	
+	  // Handle schedule table cell clicks
+	  document.querySelectorAll('.event-cell').forEach(cell => {
+	    cell.addEventListener('click', function() {
+	      const colIndex = this.cellIndex;
+	      const table = this.closest('table');
+	      const headerCell = table.querySelectorAll('thead th')[colIndex];
+	      const zoneKey = headerCell.getAttribute('data-zone');
+	
+	      if (zoneKey) {
+	        zoomToZone(zoneKey);
+	      }
+	    });
+	  });
+	
+	  function resetMapZoom() {
+	    scale = 1;
+	    panX = 0;
+	    panY = 0;
+	    document.querySelectorAll('.map-box').forEach(box => box.classList.remove('active'));
+	    applyTransform();
+	  }
+	
+	  // Mouse Dragging
+	  mapWrapper.addEventListener('mousedown', (e) => {
+	    isDragging = true;
+	    startX = e.clientX - panX;
+	    startY = e.clientY - panY;
+	  });
+	
+	  window.addEventListener('mousemove', (e) => {
+	    if (!isDragging) return;
+	    panX = e.clientX - startX;
+	    panY = e.clientY - startY;
+	    applyTransform();
+	  });
+	
+	  window.addEventListener('mouseup', () => {
+	    isDragging = false;
+	  });
+	
+	  // Mouse Wheel Zooming
+	  mapWrapper.addEventListener('wheel', (e) => {
+	    e.preventDefault();
+	    const zoomFactor = e.deltaY < 0 ? 1.15 : 0.85;
+	    const newScale = Math.min(Math.max(1, scale * zoomFactor), 5);
+	
+	    const rect = mapWrapper.getBoundingClientRect();
+	    const mouseX = e.clientX - rect.left;
+	    const mouseY = e.clientY - rect.top;
+	
+	    panX = mouseX - (mouseX - panX) * (newScale / scale);
+	    panY = mouseY - (mouseY - panY) * (newScale / scale);
+	    scale = newScale;
+	
+	    applyTransform();
+	  }, { passive: false });
+	
+	  // Touch Support (Tap Drag & Pinch Zoom)
+	  function getDistance(touches) {
+	    const dx = touches[0].clientX - touches[1].clientX;
+	    const dy = touches[0].clientY - touches[1].clientY;
+	    return Math.sqrt(dx * dx + dy * dy);
+	  }
+	
+	  mapWrapper.addEventListener('touchstart', (e) => {
+	    if (e.touches.length === 1) {
+	      isDragging = true;
+	      startX = e.touches[0].clientX - panX;
+	      startY = e.touches[0].clientY - panY;
+	    } else if (e.touches.length === 2) {
+	      isDragging = false;
+	      initialPinchDistance = getDistance(e.touches);
+	    }
+	  });
+	
+	  mapWrapper.addEventListener('touchmove', (e) => {
+	    if (e.touches.length === 1 && isDragging) {
+	      panX = e.touches[0].clientX - startX;
+	      panY = e.touches[0].clientY - startY;
+	      applyTransform();
+	    } else if (e.touches.length === 2 && initialPinchDistance) {
+	      const currentDistance = getDistance(e.touches);
+	      const zoomFactor = currentDistance / initialPinchDistance;
+	      const newScale = Math.min(Math.max(1, scale * zoomFactor), 5);
+	
+	      const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+	      const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+	
+	      panX = midX - (midX - panX) * (newScale / scale);
+	      panY = midY - (midY - panY) * (newScale / scale);
+	      scale = newScale;
+	      initialPinchDistance = currentDistance;
+	
+	      applyTransform();
+	    }
+	  });
+	
+	  mapWrapper.addEventListener('touchend', () => {
+	    isDragging = false;
+	    initialPinchDistance = null;
+	  });
+	</script>
 </body>
 </html>
