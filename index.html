@@ -795,26 +795,28 @@ document.querySelectorAll('.event-cell').forEach(cell => {
 	  });
 	
 	  mapWrapper.addEventListener('touchmove', (e) => {
-	    if (e.touches.length === 1 && isDragging) {
-	      panX = e.touches[0].clientX - startX;
-	      panY = e.touches[0].clientY - startY;
-	      applyTransform();
-	    } else if (e.touches.length === 2 && initialPinchDistance) {
-	      const currentDistance = getDistance(e.touches);
-	      const zoomFactor = currentDistance / initialPinchDistance;
-	      const newScale = Math.min(Math.max(1, scale * zoomFactor), 5);
-	
-	      const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-	      const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-	
-	      panX = midX - (midX - panX) * (newScale / scale);
-	      panY = midY - (midY - panY) * (newScale / scale);
-	      scale = newScale;
-	      initialPinchDistance = currentDistance;
-	
-	      applyTransform();
-	    }
-	  });
+  if (e.touches.length === 1 && isDragging) {
+    panX = e.touches[0].clientX - startX;
+    panY = e.touches[0].clientY - startY;
+    applyTransform();
+  } else if (e.touches.length === 2 && initialPinchDistance) {
+    const currentDistance = getDistance(e.touches);
+    const zoomFactor = currentDistance / initialPinchDistance;
+    const newScale = Math.min(Math.max(1, scale * zoomFactor), 5);
+
+    const rect = mapWrapper.getBoundingClientRect();
+    const midX = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - rect.left;
+    const midY = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - rect.top;
+
+    panX = midX - (midX - panX) * (newScale / scale);
+    panY = midY - (midY - panY) * (newScale / scale);
+    scale = newScale;
+    initialPinchDistance = currentDistance;
+
+    applyTransform();
+  }
+});
+
 	
 	  mapWrapper.addEventListener('touchend', () => {
 	    isDragging = false;
