@@ -718,18 +718,20 @@
 	  }
 	
 	  // Handle schedule table cell clicks
-	  document.querySelectorAll('.event-cell').forEach(cell => {
-	    cell.addEventListener('click', function() {
-	      const colIndex = this.cellIndex;
-	      const table = this.closest('table');
-	      const headerCell = table.querySelectorAll('thead th')[colIndex];
-	      const zoneKey = headerCell.getAttribute('data-zone');
-	
-	      if (zoneKey) {
-	        zoomToZone(zoneKey);
-	      }
-	    });
-	  });
+	  // Handle schedule table cell clicks
+document.querySelectorAll('.event-cell').forEach(cell => {
+  cell.addEventListener('click', function() {
+    const row = this.closest('tr');
+    const rowHeader = row.querySelector('th[data-zone]');
+    if (rowHeader) {
+      const zoneKey = rowHeader.getAttribute('data-zone');
+      if (zoneKey) {
+        zoomToZone(zoneKey);
+      }
+    }
+  });
+});
+
 	
 	  function resetMapZoom() {
 	    scale = 1;
