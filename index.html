@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Blizzcon 2026</title>
   <style>
     :root {
@@ -24,6 +24,7 @@
     html, body {
       height: 100vh;
       overflow: hidden;
+      touch-action: none;
     }
 
     body {
@@ -79,7 +80,7 @@
     .content-area {
       width: 100%;
       max-width: 1200px;
-      height: calc(100vh - 110px); /* Fits inside browser viewport with buffer */
+      height: calc(100vh - 110px);
       display: flex;
       flex-direction: column;
     }
@@ -92,6 +93,7 @@
       border-radius: 8px;
       background-color: var(--card-bg);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      touch-action: pan-x pan-y;
     }
 
     table {
@@ -183,8 +185,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: grab;
+      user-select: none;
     }
-    
+
+    .map-wrapper:active {
+      cursor: grabbing;
+    }
+
     .map-container {
       position: relative;
       width: 100%;
@@ -192,24 +200,26 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.4s ease-out;
     }
-    
+
     .map-stage {
       position: relative;
       display: inline-block;
       max-width: 100%;
       max-height: 100%;
+      transform-origin: 0 0;
+      transition: transform 0.1s ease-out;
     }
-    
+
     .map-stage img {
       display: block;
       max-width: 100%;
       max-height: calc(100vh - 120px);
       width: auto;
       height: auto;
+      pointer-events: none;
     }
-    
+
     .map-overlay {
       position: absolute;
       top: 0;
@@ -567,7 +577,7 @@
     <!-- MAP TAB -->
     <div id="map" class="tab-content map-wrapper">
       <div class="map-container" id="map-container">
-        <div class="map-stage">
+        <div class="map-stage" id="map-stage">
           <img src="map.png" alt="BlizzCon Floor Map" id="map-image">
           <div class="map-overlay">
             <div class="map-box" id="zone-hall-d" style="top: 40%; left: 8%; width: 12%; height: 32%;"></div>
@@ -579,7 +589,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="map-controls">
         <button class="map-btn" onclick="resetMapZoom()">Reset Zoom</button>
       </div>
@@ -587,7 +597,6 @@
   </div>
 
   <script>
-    // Exact center coordinates (% from top-left) for map zones
     const zoneCoords = {
       'hall-d':  { x: 14, y: 56, scale: 2.5 },
       'hall-c':  { x: 25.5, y: 44, scale: 2.5 },
@@ -624,37 +633,127 @@
       });
     });
 
+    // Map Pan/Zoom State
+    let scale = 1;
+    let panX = 0;
+    let panY = 0;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let initialPinchDistance = null;
+
+    const mapStage = document.getElementById('map-stage');
+    const mapWrapper = document.getElementById('map');
+
+    function applyTransform() {
+      mapStage.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+    }
+
     function zoomToZone(zoneKey) {
-      const mapContainer = document.getElementById('map-container');
       const target = zoneCoords[zoneKey];
-    
       if (!target) return;
-    
-      // Highlight bounding box
+
       document.querySelectorAll('.map-box').forEach(box => box.classList.remove('active'));
       const targetBox = document.getElementById(`zone-${zoneKey}`);
       if (targetBox) targetBox.classList.add('active');
-    
-      // Set transform-origin to target zone location
-      mapContainer.style.transformOrigin = `${target.x}% ${target.y}%`;
-      
-      // Calculate offset translation to center target zone inside viewer
-      const mapWrapper = document.querySelector('.map-wrapper');
-      const wrapperWidth = mapWrapper.clientWidth;
-      const wrapperHeight = mapWrapper.clientHeight;
-    
-      const offsetX = (50 - target.x) * (wrapperWidth / 100);
-      const offsetY = (50 - target.y) * (wrapperHeight / 100);
-    
-      mapContainer.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${target.scale})`;
+
+      const stageWidth = mapStage.offsetWidth;
+      const stageHeight = mapStage.offsetHeight;
+
+      scale = target.scale;
+      panX = (stageWidth / 2) - (stageWidth * (target.x / 100) * scale);
+      panY = (stageHeight / 2) - (stageHeight * (target.y / 100) * scale);
+
+      applyTransform();
     }
 
     function resetMapZoom() {
-      const mapContainer = document.getElementById('map-container');
-      mapContainer.style.transformOrigin = '50% 50%';
-      mapContainer.style.transform = 'translate(0px, 0px) scale(1)';
+      scale = 1;
+      panX = 0;
+      panY = 0;
       document.querySelectorAll('.map-box').forEach(box => box.classList.remove('active'));
+      applyTransform();
     }
+
+    // Mouse Dragging
+    mapWrapper.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX - panX;
+      startY = e.clientY - panY;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      panX = e.clientX - startX;
+      panY = e.clientY - startY;
+      applyTransform();
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    // Mouse Wheel Zooming
+    mapWrapper.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const zoomFactor = e.deltaY < 0 ? 1.15 : 0.85;
+      const newScale = Math.min(Math.max(1, scale * zoomFactor), 5);
+
+      const rect = mapWrapper.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      panX = mouseX - (mouseX - panX) * (newScale / scale);
+      panY = mouseY - (mouseY - panY) * (newScale / scale);
+      scale = newScale;
+
+      applyTransform();
+    }, { passive: false });
+
+    // Touch Support (Tap Drag & Pinch Zoom)
+    function getDistance(touches) {
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    mapWrapper.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        startX = e.touches[0].clientX - panX;
+        startY = e.touches[0].clientY - panY;
+      } else if (e.touches.length === 2) {
+        isDragging = false;
+        initialPinchDistance = getDistance(e.touches);
+      }
+    });
+
+    mapWrapper.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1 && isDragging) {
+        panX = e.touches[0].clientX - startX;
+        panY = e.touches[0].clientY - startY;
+        applyTransform();
+      } else if (e.touches.length === 2 && initialPinchDistance) {
+        const currentDistance = getDistance(e.touches);
+        const zoomFactor = currentDistance / initialPinchDistance;
+        const newScale = Math.min(Math.max(1, scale * zoomFactor), 5);
+
+        const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+
+        panX = midX - (midX - panX) * (newScale / scale);
+        panY = midY - (midY - panY) * (newScale / scale);
+        scale = newScale;
+        initialPinchDistance = currentDistance;
+
+        applyTransform();
+      }
+    });
+
+    mapWrapper.addEventListener('touchend', () => {
+      isDragging = false;
+      initialPinchDistance = null;
+    });
   </script>
 </body>
 </html>
