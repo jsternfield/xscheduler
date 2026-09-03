@@ -224,6 +224,31 @@
       pointer-events: none;
     }
 
+	#map {
+	  position: relative;
+	  width: 100%;
+	  overflow: hidden;
+	  background-color: #000;
+	  touch-action: none;
+	  /* Clips wrapper height tightly to the content */
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	}
+	
+	#map-stage {
+	  position: relative;
+	  width: 100%;
+	  transform-origin: 0 0; /* Ensures transform math aligns with top-left origin */
+	  will-change: transform;
+	}
+	
+	#map-stage img {
+	  width: 100%;
+	  height: auto;
+	  display: block; /* Removes baseline spacing underneath the image */
+	}
+
     .map-overlay {
       position: absolute;
       top: 0;
@@ -683,55 +708,55 @@
 	  function applyTransform() {
 	    mapStage.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
 	  }
-	
+
 	  function getZoneCoords(zoneId) {
 		  const el = document.getElementById(`zone-${zoneId}`);
 		  if (!el) return null;
 		
-		  // Use relative percentage coordinates from CSS
-		  const left = parseFloat(el.style.left);
-		  const top = parseFloat(el.style.top);
-		  const width = parseFloat(el.style.width);
-		  const height = parseFloat(el.style.height);
+		  // Temporarily reset transform to measure true unscaled relative offset
+		  const currentTransform = mapStage.style.transform;
+		  mapStage.style.transform = 'none';
+		
+		  const stageRect = mapStage.getBoundingClientRect();
+		  const elRect = el.getBoundingClientRect();
+		
+		  // Get exact pixel center of the zone relative to the map stage
+		  const relativeCenterX = (elRect.left - stageRect.left) + (elRect.width / 2);
+		  const relativeCenterY = (elRect.top - stageRect.top) + (elRect.height / 2);
+		
+		  // Restore active transform
+		  mapStage.style.transform = currentTransform;
 		
 		  return {
-		    x: left + (width / 2),
-		    y: top + (height / 2),
+		    x: relativeCenterX,
+		    y: relativeCenterY,
 		    scale: DEFAULT_SCALE
 		  };
 		}
-	
-	  function applyMapTransform(percentX, percentY, targetScale) {
-		  const wrapperWidth = mapWrapper.clientWidth;
-		  const wrapperHeight = mapWrapper.clientHeight;
-		  const stageWidth = mapStage.offsetWidth;
-		  const stageHeight = mapStage.offsetHeight;
+		
+		function applyMapTransform(targetX, targetY, targetScale) {
+		  const wrapperRect = mapWrapper.getBoundingClientRect();
 		
 		  scale = targetScale;
 		
-		  // Calculate target position in unscaled stage pixels
-		  const targetX = (percentX / 100) * stageWidth;
-		  const targetY = (percentY / 100) * stageHeight;
-		
-		  // Calculate pan needed to center the target point under scale
-		  panX = (wrapperWidth / 2) - (targetX * scale);
-		  panY = (wrapperHeight / 2) - (targetY * scale);
+		  // Center target point directly in the visible wrapper viewport
+		  panX = (wrapperRect.width / 2) - (targetX * scale);
+		  panY = (wrapperRect.height / 2) - (targetY * scale);
 		
 		  applyTransform();
 		}
-	
-	  function zoomToZone(zoneId) {
-	    const coords = getZoneCoords(zoneId);
-	    if (!coords) return;
-	
-	    // Highlight the active zone box
-	    document.querySelectorAll('.map-box').forEach(box => box.classList.remove('active'));
-	    const targetBox = document.getElementById(`zone-${zoneId}`);
-	    if (targetBox) targetBox.classList.add('active');
-	
-	    applyMapTransform(coords.x, coords.y, coords.scale);
-	  }
-	
+		
+		function zoomToZone(zoneId) {
+		  const coords = getZoneCoords(zoneId);
+		  if (!coords) return;
+		
+		  document.querySelectorAll('.map-box').forEach(box => box.classList.remove('active'));
+		  const targetBox = document.getElementById(`zone-${zoneId}`);
+		  if (targetBox) targetBox.classList.add('active');
+		
+		  applyMapTransform(coords.x, coords.y, coords.scale);
+		}
+	  
 	  function switchTab(tabId, btn) {
 	    document.querySelectorAll('.table-wrapper').forEach(content => {
 	      content.classList.remove('active');
