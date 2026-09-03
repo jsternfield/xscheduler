@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BlizzCon Schedule & Map</title>
+  <title>Blizzcon 2026</title>
   <style>
     :root {
       --bg-color: #0f172a;
@@ -21,6 +21,11 @@
       padding: 0;
     }
 
+    html, body {
+      height: 100vh;
+      overflow: hidden;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg-color);
@@ -34,8 +39,9 @@
     header {
       width: 100%;
       max-width: 1200px;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
       text-align: center;
+      flex-shrink: 0;
     }
 
     h1 {
@@ -43,22 +49,21 @@
       color: var(--accent-blue);
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .tab-container {
       display: flex;
       justify-content: center;
       gap: 10px;
-      margin-bottom: 16px;
     }
 
     .tab-button {
       background-color: var(--card-bg);
       color: var(--text-muted);
       border: 1px solid var(--border-color);
-      padding: 10px 20px;
-      font-size: 1rem;
+      padding: 8px 16px;
+      font-size: 0.95rem;
       font-weight: bold;
       border-radius: 6px;
       cursor: pointer;
@@ -74,11 +79,14 @@
     .content-area {
       width: 100%;
       max-width: 1200px;
+      height: calc(100vh - 110px); /* Fits inside browser viewport with buffer */
+      display: flex;
+      flex-direction: column;
     }
 
     .table-wrapper {
       width: 100%;
-      max-height: 75vh;
+      flex: 1;
       overflow: auto;
       border: 1px solid var(--border-color);
       border-radius: 8px;
@@ -94,11 +102,11 @@
     }
 
     th, td {
-      padding: 12px 16px;
+      padding: 10px 14px;
       text-align: left;
       border-bottom: 1px solid var(--border-color);
       border-right: 1px solid var(--border-color);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
 
     th {
@@ -109,7 +117,7 @@
       top: 0;
       z-index: 2;
       text-transform: uppercase;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       letter-spacing: 0.5px;
     }
 
@@ -118,8 +126,8 @@
       left: 0;
       background-color: #111827;
       z-index: 1;
-      width: 140px;
-      min-width: 140px;
+      width: 130px;
+      min-width: 130px;
       font-weight: bold;
       color: var(--accent-blue);
     }
@@ -159,14 +167,15 @@
     }
 
     .tab-content.active {
-      display: block;
+      display: flex;
+      flex-direction: column;
     }
 
     /* MAP TAB STYLES */
     .map-wrapper {
       position: relative;
       width: 100%;
-      height: 75vh;
+      flex: 1;
       overflow: hidden;
       border: 1px solid var(--border-color);
       border-radius: 8px;
@@ -190,7 +199,6 @@
       display: block;
     }
 
-    /* Overlay bounding boxes */
     .map-overlay {
       position: absolute;
       top: 0;
@@ -237,7 +245,7 @@
 <body>
 
   <header>
-    <h1>BlizzCon Schedule & Map</h1>
+    <h1>Blizzcon 2026</h1>
     <div class="tab-container">
       <button class="tab-button active" onclick="switchTab('day1', this)">Day 1 (Sat, Sep 12)</button>
       <button class="tab-button" onclick="switchTab('day2', this)">Day 2 (Sun, Sep 13)</button>
@@ -548,11 +556,9 @@
     <!-- MAP TAB -->
     <div id="map" class="tab-content map-wrapper">
       <div class="map-container" id="map-container">
-        <!-- Replace src with your local exported image filename if needed -->
         <img src="map.png" alt="BlizzCon Floor Map" id="map-image">
         
         <div class="map-overlay">
-          <!-- Bounding Boxes (% relative coordinates) -->
           <div class="map-box" id="zone-hall-d" style="top: 38%; left: 8%; width: 14%; height: 28%;"></div>
           <div class="map-box" id="zone-hall-c" style="top: 28%; left: 21%; width: 12%; height: 25%;"></div>
           <div class="map-box" id="zone-hall-b" style="top: 22%; left: 32%; width: 11%; height: 22%;"></div>
@@ -569,7 +575,6 @@
   </div>
 
   <script>
-    // Coordinates mapping for zoom target centers and zoom scale
     const zoneCoords = {
       'hall-d': { x: 15, y: 52, scale: 2.5 },
       'hall-c': { x: 27, y: 40, scale: 2.5 },
@@ -591,7 +596,6 @@
       btn.classList.add('active');
     }
 
-    // Attach click listeners to interactive event cells
     document.querySelectorAll('.event-cell').forEach(cell => {
       cell.addEventListener('click', function() {
         const colIndex = this.cellIndex;
@@ -600,11 +604,8 @@
         const zoneKey = headerCell.getAttribute('data-zone');
 
         if (zoneKey && zoneCoords[zoneKey]) {
-          // Switch to Map tab
           const mapBtn = document.getElementById('map-tab-btn');
           switchTab('map', mapBtn);
-
-          // Focus & Zoom to location
           zoomToZone(zoneKey);
         }
       });
@@ -614,12 +615,10 @@
       const mapContainer = document.getElementById('map-container');
       const target = zoneCoords[zoneKey];
 
-      // Highlight target bounding box
       document.querySelectorAll('.map-box').forEach(box => box.classList.remove('active'));
       const targetBox = document.getElementById(`zone-${zoneKey}`);
       if (targetBox) targetBox.classList.add('active');
 
-      // Calculate CSS transform center shift
       const translateX = (50 - target.x) * (target.scale / 1.5);
       const translateY = (50 - target.y) * (target.scale / 1.5);
 
