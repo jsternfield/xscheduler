@@ -559,12 +559,23 @@
         <img src="map.png" alt="BlizzCon Floor Map" id="map-image">
         
         <div class="map-overlay">
-          <div class="map-box" id="zone-hall-d" style="top: 38%; left: 8%; width: 14%; height: 28%;"></div>
-          <div class="map-box" id="zone-hall-c" style="top: 28%; left: 21%; width: 12%; height: 25%;"></div>
-          <div class="map-box" id="zone-hall-b" style="top: 22%; left: 32%; width: 11%; height: 22%;"></div>
-          <div class="map-box" id="zone-hall-a" style="top: 15%; left: 43%; width: 10%; height: 20%;"></div>
-          <div class="map-box" id="zone-arena" style="top: 20%; left: 70%; width: 14%; height: 25%;"></div>
-          <div class="map-box" id="zone-legends" style="top: 4%; left: 50%; width: 14%; height: 16%;"></div>
+          <!-- Hall D / Main Stage -->
+          <div class="map-box" id="zone-hall-d" style="top: 38%; left: 7.5%; width: 14%; height: 28%;"></div>
+        
+          <!-- Hall C / WoW Stage -->
+          <div class="map-box" id="zone-hall-c" style="top: 30%; left: 19.5%; width: 12.5%; height: 26%;"></div>
+        
+          <!-- Hall B / Hearthstone Stage -->
+          <div class="map-box" id="zone-hall-b" style="top: 24%; left: 30.5%; width: 13.5%; height: 25%;"></div>
+        
+          <!-- Hall A / Classic Cup Stage -->
+          <div class="map-box" id="zone-hall-a" style="top: 17%; left: 43%; width: 13%; height: 26%;"></div>
+        
+          <!-- Overwatch Arena -->
+          <div class="map-box" id="zone-arena" style="top: 24%; left: 63%; width: 14.5%; height: 22%;"></div>
+        
+          <!-- Level 2 / Legends Stage -->
+          <div class="map-box" id="zone-legends" style="top: 10%; left: 53.5%; width: 11%; height: 13%;"></div>
         </div>
       </div>
 
@@ -576,12 +587,12 @@
 
   <script>
     const zoneCoords = {
-      'hall-d': { x: 15, y: 52, scale: 2.5 },
-      'hall-c': { x: 27, y: 40, scale: 2.5 },
-      'hall-b': { x: 37, y: 33, scale: 2.5 },
-      'hall-a': { x: 48, y: 25, scale: 2.5 },
-      'arena':  { x: 77, y: 32, scale: 2.5 },
-      'legends':{ x: 57, y: 12, scale: 2.8 }
+      'hall-d':  { x: 14.5, y: 52, scale: 2.5 },
+      'hall-c':  { x: 25.8, y: 43, scale: 2.5 },
+      'hall-b':  { x: 37.2, y: 36.5, scale: 2.5 },
+      'hall-a':  { x: 49.5, y: 30, scale: 2.5 },
+      'arena':   { x: 70.2, y: 35, scale: 2.5 },
+      'legends': { x: 59, y: 16.5, scale: 2.8 }
     };
 
     function switchTab(tabId, btn) {
