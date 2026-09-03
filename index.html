@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BlizzCon Schedule</title>
+  <title>BlizzCon Schedule & Map</title>
   <style>
     :root {
       --bg-color: #0f172a;
@@ -71,16 +71,19 @@
       border-color: var(--accent-blue);
     }
 
-    .table-wrapper {
+    .content-area {
       width: 100%;
       max-width: 1200px;
+    }
+
+    .table-wrapper {
+      width: 100%;
       max-height: 75vh;
       overflow: auto;
       border: 1px solid var(--border-color);
       border-radius: 8px;
       background-color: var(--card-bg);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-      position: relative;
     }
 
     table {
@@ -110,7 +113,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* Sticky Time Column */
     th:first-child, td:first-child {
       position: sticky;
       left: 0;
@@ -127,17 +129,24 @@
       background-color: #050b14;
     }
 
-    tr:hover td {
-      background-color: #26334d;
+    .event-cell {
+      cursor: pointer;
+      transition: background-color 0.2s ease;
     }
 
-    tr:hover td:first-child {
-      background-color: #1a2333;
+    .event-cell:hover {
+      background-color: #1e3a8a !important;
+      color: #ffffff;
+    }
+
+    tr:hover td {
+      background-color: #26334d;
     }
 
     .empty-cell {
       color: #475569;
       text-align: center;
+      cursor: default;
     }
 
     .simulcast {
@@ -145,345 +154,483 @@
       font-style: italic;
     }
 
-    .day-schedule {
+    .tab-content {
       display: none;
     }
 
-    .day-schedule.active {
-      display: table;
+    .tab-content.active {
+      display: block;
     }
 
-    /* Scrollbar Styling */
-    .table-wrapper::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+    /* MAP TAB STYLES */
+    .map-wrapper {
+      position: relative;
+      width: 100%;
+      height: 75vh;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background-color: #000;
     }
-    .table-wrapper::-webkit-scrollbar-track {
-      background: var(--bg-color);
+
+    .map-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform-origin: 0 0;
+      transition: transform 0.5s ease-in-out;
     }
-    .table-wrapper::-webkit-scrollbar-thumb {
-      background: var(--border-color);
+
+    .map-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Overlay bounding boxes */
+    .map-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .map-box {
+      position: absolute;
+      border: 2px solid rgba(0, 170, 255, 0.6);
+      background-color: rgba(0, 170, 255, 0.15);
       border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .map-box.active {
+      border-color: var(--accent-gold);
+      background-color: rgba(255, 183, 0, 0.35);
+      box-shadow: 0 0 15px var(--accent-gold);
+    }
+
+    .map-controls {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+    }
+
+    .map-btn {
+      background: var(--card-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>BlizzCon Schedule</h1>
+    <h1>BlizzCon Schedule & Map</h1>
     <div class="tab-container">
-      <button class="tab-button active" onclick="switchDay('day1', this)">Day 1 (Sat, Sep 12)</button>
-      <button class="tab-button" onclick="switchDay('day2', this)">Day 2 (Sun, Sep 13)</button>
+      <button class="tab-button active" onclick="switchTab('day1', this)">Day 1 (Sat, Sep 12)</button>
+      <button class="tab-button" onclick="switchTab('day2', this)">Day 2 (Sun, Sep 13)</button>
+      <button class="tab-button" id="map-tab-btn" onclick="switchTab('map', this)">Show Map</button>
     </div>
   </header>
 
-  <div class="table-wrapper">
-    <table id="day1" class="day-schedule active">
-      <thead>
-        <tr>
-          <th>Time (PDT)</th>
-          <th>Main Stage (Hall D)</th>
-          <th>Legends Stage (2nd Fl)</th>
-          <th>WoW Stage (Hall C)</th>
-          <th>Hearthstone Stage (Hall B)</th>
-          <th>Classic Cup Stage (Hall A)</th>
-          <th>OW Arena</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>10:30–11:45 AM</td>
-          <td>Opening Ceremony</td>
-          <td class="simulcast">(Simulcast)</td>
-          <td class="simulcast">(Simulcast)</td>
-          <td class="simulcast">(Simulcast)</td>
-          <td class="simulcast">(Simulcast)</td>
-          <td class="simulcast">(Simulcast)</td>
-        </tr>
-        <tr>
-          <td>12:00–12:45 PM</td>
-          <td>World of Warcraft: What's Next</td>
-          <td>OW Dev Livestream: Live from BlizzCon!</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Group Stage</td>
-        </tr>
-        <tr>
-          <td>1:00–1:45 PM</td>
-          <td class="empty-cell">—</td>
-          <td>TrailerCraft</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Group Stage</td>
-        </tr>
-        <tr>
-          <td>1:45–2:30 PM</td>
-          <td>Diablo: Developer Update</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Group Stage</td>
-        </tr>
-        <tr>
-          <td>2:00–2:45 PM</td>
-          <td class="empty-cell">—</td>
-          <td>Building Cutscenes in WoW</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Group Stage</td>
-        </tr>
-        <tr>
-          <td>2:30–3:15 PM</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>Custodians of Legacy Games</td>
-          <td>OW World Cup Group Stage</td>
-        </tr>
-        <tr>
-          <td>2:45–3:30 PM</td>
-          <td>WoW: What's Next II</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Group Stage</td>
-        </tr>
-        <tr>
-          <td>3:00–3:45 PM</td>
-          <td class="empty-cell">—</td>
-          <td>Sound Design</td>
-          <td class="empty-cell">—</td>
-          <td>Hearthstone: What's Next</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Group Stage</td>
-        </tr>
-        <tr>
-          <td>3:30–4:15 PM</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>Classic Game Deep Dive</td>
-          <td>OW World Cup Group Stage</td>
-        </tr>
-        <tr>
-          <td>3:45–4:30 PM</td>
-          <td>Overwatch: Hero Deep Dive</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Group Stage</td>
-        </tr>
-        <tr>
-          <td>4:15–5:15 PM</td>
-          <td class="empty-cell">—</td>
-          <td>The Art of Darkness: Diablo IV Cinematics</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Group Stage</td>
-        </tr>
-        <tr>
-          <td>4:45–7:00 PM</td>
-          <td>BlizzCon Community Night</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-        </tr>
-        <tr>
-          <td>5:30–6:30 PM</td>
-          <td class="empty-cell">—</td>
-          <td>Kinda Funny Live from BlizzCon</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="content-area">
+    <!-- DAY 1 SCHEDULE -->
+    <div id="day1" class="tab-content table-wrapper active">
+      <table>
+        <thead>
+          <tr>
+            <th>Time (PDT)</th>
+            <th data-zone="hall-d">Main Stage (Hall D)</th>
+            <th data-zone="legends">Legends Stage (2nd Fl)</th>
+            <th data-zone="hall-c">WoW Stage (Hall C)</th>
+            <th data-zone="hall-b">Hearthstone Stage (Hall B)</th>
+            <th data-zone="hall-a">Classic Cup Stage (Hall A)</th>
+            <th data-zone="arena">OW Arena</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>10:30–11:45 AM</td>
+            <td class="event-cell">Opening Ceremony</td>
+            <td class="event-cell simulcast">(Simulcast)</td>
+            <td class="event-cell simulcast">(Simulcast)</td>
+            <td class="event-cell simulcast">(Simulcast)</td>
+            <td class="event-cell simulcast">(Simulcast)</td>
+            <td class="event-cell simulcast">(Simulcast)</td>
+          </tr>
+          <tr>
+            <td>12:00–12:45 PM</td>
+            <td class="event-cell">World of Warcraft: What's Next</td>
+            <td class="event-cell">OW Dev Livestream: Live from BlizzCon!</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Group Stage</td>
+          </tr>
+          <tr>
+            <td>1:00–1:45 PM</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">TrailerCraft</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Group Stage</td>
+          </tr>
+          <tr>
+            <td>1:45–2:30 PM</td>
+            <td class="event-cell">Diablo: Developer Update</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Group Stage</td>
+          </tr>
+          <tr>
+            <td>2:00–2:45 PM</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">Building Cutscenes in WoW</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Group Stage</td>
+          </tr>
+          <tr>
+            <td>2:30–3:15 PM</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">Custodians of Legacy Games</td>
+            <td class="event-cell">OW World Cup Group Stage</td>
+          </tr>
+          <tr>
+            <td>2:45–3:30 PM</td>
+            <td class="event-cell">WoW: What's Next II</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Group Stage</td>
+          </tr>
+          <tr>
+            <td>3:00–3:45 PM</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">Sound Design</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">Hearthstone: What's Next</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Group Stage</td>
+          </tr>
+          <tr>
+            <td>3:30–4:15 PM</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">Classic Game Deep Dive</td>
+            <td class="event-cell">OW World Cup Group Stage</td>
+          </tr>
+          <tr>
+            <td>3:45–4:30 PM</td>
+            <td class="event-cell">Overwatch: Hero Deep Dive</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Group Stage</td>
+          </tr>
+          <tr>
+            <td>4:15–5:15 PM</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">The Art of Darkness: Diablo IV Cinematics</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Group Stage</td>
+          </tr>
+          <tr>
+            <td>4:45–7:00 PM</td>
+            <td class="event-cell">BlizzCon Community Night</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+          </tr>
+          <tr>
+            <td>5:30–6:30 PM</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">Kinda Funny Live from BlizzCon</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-    <table id="day2" class="day-schedule">
-      <thead>
-        <tr>
-          <th>Time (PDT)</th>
-          <th>Main Stage (Hall D)</th>
-          <th>Legends Stage (2nd Fl)</th>
-          <th>WoW Stage (Hall C)</th>
-          <th>Hearthstone Stage (Hall B)</th>
-          <th>Classic Cup Stage (Hall A)</th>
-          <th>OW Arena</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>9:30–10:30 AM</td>
-          <td class="empty-cell">—</td>
-          <td>30 Years of Battle.net (w/ CDPR)</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-        </tr>
-        <tr>
-          <td>10:00–10:45 AM</td>
-          <td>World of Warcraft: Deep Dive</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Finals</td>
-        </tr>
-        <tr>
-          <td>10:45–11:30 AM</td>
-          <td class="empty-cell">—</td>
-          <td>WoW: Crafting Coziness & Freedom</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Finals</td>
-        </tr>
-        <tr>
-          <td>11:00–11:45 AM</td>
-          <td>Diablo IV: What's Next</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Finals</td>
-        </tr>
-        <tr>
-          <td>11:45 AM–12:30 PM</td>
-          <td class="empty-cell">—</td>
-          <td>World Building in World of Warcraft</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Finals</td>
-        </tr>
-        <tr>
-          <td>12:00–2:00 PM</td>
-          <td>QuestWatch: Live!!!</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Finals</td>
-        </tr>
-        <tr>
-          <td>12:45–1:45 PM</td>
-          <td class="empty-cell">—</td>
-          <td>Villains of Blizzard</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Finals</td>
-        </tr>
-        <tr>
-          <td>2:00–2:45 PM</td>
-          <td class="empty-cell">—</td>
-          <td>Collaborative Storytelling in SFD</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Finals</td>
-        </tr>
-        <tr>
-          <td>2:15–3:00 PM</td>
-          <td>World of Warcraft: Design Deep Dive</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Finals</td>
-        </tr>
-        <tr>
-          <td>3:00–3:45 PM</td>
-          <td class="empty-cell">—</td>
-          <td>OW Dev Livestream: Live from BlizzCon!</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>OW World Cup Finals</td>
-        </tr>
-        <tr>
-          <td>3:15–4:00 PM</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>Hearthstone: Battlegrounds Design</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-        </tr>
-        <tr>
-          <td>3:15–5:30 PM</td>
-          <td>Voices of Blizzard</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-        </tr>
-        <tr>
-          <td>4:00–4:45 PM</td>
-          <td class="empty-cell">—</td>
-          <td>Localization: Bringing Worlds Together</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-        </tr>
-        <tr>
-          <td>4:15–5:00 PM</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td>WoW Hardcore: What's Next</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-        </tr>
-        <tr>
-          <td>5:30–5:45 PM</td>
-          <td>Closing Remarks</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-        </tr>
-        <tr>
-          <td>6:00–7:00 PM</td>
-          <td>LE SSERAFIM Live Performance</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-          <td class="empty-cell">—</td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- DAY 2 SCHEDULE -->
+    <div id="day2" class="tab-content table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Time (PDT)</th>
+            <th data-zone="hall-d">Main Stage (Hall D)</th>
+            <th data-zone="legends">Legends Stage (2nd Fl)</th>
+            <th data-zone="hall-c">WoW Stage (Hall C)</th>
+            <th data-zone="hall-b">Hearthstone Stage (Hall B)</th>
+            <th data-zone="hall-a">Classic Cup Stage (Hall A)</th>
+            <th data-zone="arena">OW Arena</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>9:30–10:30 AM</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">30 Years of Battle.net (w/ CDPR)</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+          </tr>
+          <tr>
+            <td>10:00–10:45 AM</td>
+            <td class="event-cell">World of Warcraft: Deep Dive</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Finals</td>
+          </tr>
+          <tr>
+            <td>10:45–11:30 AM</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">WoW: Crafting Coziness & Freedom</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Finals</td>
+          </tr>
+          <tr>
+            <td>11:00–11:45 AM</td>
+            <td class="event-cell">Diablo IV: What's Next</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Finals</td>
+          </tr>
+          <tr>
+            <td>11:45 AM–12:30 PM</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">World Building in World of Warcraft</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Finals</td>
+          </tr>
+          <tr>
+            <td>12:00–2:00 PM</td>
+            <td class="event-cell">QuestWatch: Live!!!</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Finals</td>
+          </tr>
+          <tr>
+            <td>12:45–1:45 PM</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">Villains of Blizzard</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Finals</td>
+          </tr>
+          <tr>
+            <td>2:00–2:45 PM</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">Collaborative Storytelling in SFD</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Finals</td>
+          </tr>
+          <tr>
+            <td>2:15–3:00 PM</td>
+            <td class="event-cell">World of Warcraft: Design Deep Dive</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Finals</td>
+          </tr>
+          <tr>
+            <td>3:00–3:45 PM</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW Dev Livestream: Live from BlizzCon!</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">OW World Cup Finals</td>
+          </tr>
+          <tr>
+            <td>3:15–4:00 PM</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">Hearthstone: Battlegrounds Design</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+          </tr>
+          <tr>
+            <td>3:15–5:30 PM</td>
+            <td class="event-cell">Voices of Blizzard</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+          </tr>
+          <tr>
+            <td>4:00–4:45 PM</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">Localization: Bringing Worlds Together</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+          </tr>
+          <tr>
+            <td>4:15–5:00 PM</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="event-cell">WoW Hardcore: What's Next</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+          </tr>
+          <tr>
+            <td>5:30–5:45 PM</td>
+            <td class="event-cell">Closing Remarks</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+          </tr>
+          <tr>
+            <td>6:00–7:00 PM</td>
+            <td class="event-cell">LE SSERAFIM Live Performance</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+            <td class="empty-cell">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MAP TAB -->
+    <div id="map" class="tab-content map-wrapper">
+      <div class="map-container" id="map-container">
+        <!-- Replace src with your local exported image filename if needed -->
+        <img src="map.png" alt="BlizzCon Floor Map" id="map-image">
+        
+        <div class="map-overlay">
+          <!-- Bounding Boxes (% relative coordinates) -->
+          <div class="map-box" id="zone-hall-d" style="top: 38%; left: 8%; width: 14%; height: 28%;"></div>
+          <div class="map-box" id="zone-hall-c" style="top: 28%; left: 21%; width: 12%; height: 25%;"></div>
+          <div class="map-box" id="zone-hall-b" style="top: 22%; left: 32%; width: 11%; height: 22%;"></div>
+          <div class="map-box" id="zone-hall-a" style="top: 15%; left: 43%; width: 10%; height: 20%;"></div>
+          <div class="map-box" id="zone-arena" style="top: 20%; left: 70%; width: 14%; height: 25%;"></div>
+          <div class="map-box" id="zone-legends" style="top: 4%; left: 50%; width: 14%; height: 16%;"></div>
+        </div>
+      </div>
+
+      <div class="map-controls">
+        <button class="map-btn" onclick="resetMapZoom()">Reset Zoom</button>
+      </div>
+    </div>
   </div>
 
   <script>
-    function switchDay(dayId, btn) {
-      document.querySelectorAll('.day-schedule').forEach(table => {
-        table.classList.remove('active');
+    // Coordinates mapping for zoom target centers and zoom scale
+    const zoneCoords = {
+      'hall-d': { x: 15, y: 52, scale: 2.5 },
+      'hall-c': { x: 27, y: 40, scale: 2.5 },
+      'hall-b': { x: 37, y: 33, scale: 2.5 },
+      'hall-a': { x: 48, y: 25, scale: 2.5 },
+      'arena':  { x: 77, y: 32, scale: 2.5 },
+      'legends':{ x: 57, y: 12, scale: 2.8 }
+    };
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
       });
       document.querySelectorAll('.tab-button').forEach(button => {
         button.classList.remove('active');
       });
-      document.getElementById(dayId).classList.add('active');
+      
+      document.getElementById(tabId).classList.add('active');
       btn.classList.add('active');
+    }
+
+    // Attach click listeners to interactive event cells
+    document.querySelectorAll('.event-cell').forEach(cell => {
+      cell.addEventListener('click', function() {
+        const colIndex = this.cellIndex;
+        const table = this.closest('table');
+        const headerCell = table.querySelectorAll('thead th')[colIndex];
+        const zoneKey = headerCell.getAttribute('data-zone');
+
+        if (zoneKey && zoneCoords[zoneKey]) {
+          // Switch to Map tab
+          const mapBtn = document.getElementById('map-tab-btn');
+          switchTab('map', mapBtn);
+
+          // Focus & Zoom to location
+          zoomToZone(zoneKey);
+        }
+      });
+    });
+
+    function zoomToZone(zoneKey) {
+      const mapContainer = document.getElementById('map-container');
+      const target = zoneCoords[zoneKey];
+
+      // Highlight target bounding box
+      document.querySelectorAll('.map-box').forEach(box => box.classList.remove('active'));
+      const targetBox = document.getElementById(`zone-${zoneKey}`);
+      if (targetBox) targetBox.classList.add('active');
+
+      // Calculate CSS transform center shift
+      const translateX = (50 - target.x) * (target.scale / 1.5);
+      const translateY = (50 - target.y) * (target.scale / 1.5);
+
+      mapContainer.style.transform = `scale(${target.scale}) translate(${translateX}%, ${translateY}%)`;
+    }
+
+    function resetMapZoom() {
+      const mapContainer = document.getElementById('map-container');
+      mapContainer.style.transform = 'scale(1) translate(0%, 0%)';
+      document.querySelectorAll('.map-box').forEach(box => box.classList.remove('active'));
     }
   </script>
 </body>
 </html>
-
