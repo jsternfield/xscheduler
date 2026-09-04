@@ -121,7 +121,7 @@
       border-bottom: 1px solid var(--border-color);
       border-right: 1px solid var(--border-color);
       font-size: 1rem;
-	  min-width: 40vw; /* Sets each time slot column to X% of viewport width */
+	  min-width: 30vw; /* Sets each time slot column to X% of viewport width */
     }
 
     th {
@@ -339,7 +339,8 @@
     <div class="dropdown">
       <button class="tab-button dropdown-btn">Other &#9662;</button>
       <div class="dropdown-content">
-        <a href="#" onclick="zoomToZone('grand-plaza'); return false;">Grand Plaza</a>
+        <a href="#" onclick="zoomToZone('darkmoon'); return false;">Darkmoon Faire</a>
+		<a href="#" onclick="zoomToZone('grand-plaza'); return false;">Grand Plaza</a>
         <a href="#" onclick="zoomToZone('merch'); return false;">Merch Store</a>
         <a href="#" onclick="zoomToZone('registration'); return false;">Registration</a>
       </div>
@@ -388,22 +389,6 @@
               <td class="empty-cell">—</td>
             </tr>
             <tr>
-              <th data-zone="legends">Legends Stage (2nd Fl)</th>
-              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
-              <td class="event-cell">OW Dev Livestream: Live from BlizzCon!</td>
-              <td class="event-cell">TrailerCraft</td>
-              <td class="empty-cell">—</td>
-              <td class="event-cell">Building Cutscenes in WoW</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="event-cell">Sound Design</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="event-cell">The Art of Darkness: Diablo IV Cinematics</td>
-              <td class="empty-cell">—</td>
-              <td class="event-cell">Kinda Funny Live from BlizzCon</td>
-            </tr>
-            <tr>
               <th data-zone="hall-c">WoW Stage (Hall C)</th>
               <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
               <td class="empty-cell">—</td>
@@ -450,6 +435,22 @@
               <td class="empty-cell">—</td>
               <td class="empty-cell">—</td>
               <td class="empty-cell">—</td>
+            </tr>
+			<tr>
+              <th data-zone="legends">Legends Stage (2F)</th>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell">OW Dev Livestream: Live from BlizzCon!</td>
+              <td class="event-cell">TrailerCraft</td>
+              <td class="empty-cell">—</td>
+              <td class="event-cell">Building Cutscenes in WoW</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">—</td>
+              <td class="event-cell">Sound Design</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">—</td>
+              <td class="event-cell">The Art of Darkness: Diablo IV Cinematics</td>
+              <td class="empty-cell">—</td>
+              <td class="event-cell">Kinda Funny Live from BlizzCon</td>
             </tr>
             <tr>
               <th data-zone="arena">OW Arena</th>
@@ -627,6 +628,7 @@
             <div class="map-box" id="zone-hall-a" style="top: 19%; left: 43%; width: 12.5%; height: 24%;"></div>
             <div class="map-box" id="zone-arena" style="top: 22%; left: 61%; width: 19%; height: 26%;"></div>
             <div class="map-box" id="zone-legends" style="top: 9%; left: 54%; width: 9%; height: 17%;"></div>
+			<div class="map-box" id="zone-darkmoon" style="top: 5%; left: 80%; width: 17%; height: 28%;"></div>
 			<div class="map-box" id="zone-grand-plaza" style="top: 68%; left: 45%; width: 16%; height: 20%;"></div>
 			<div class="map-box" id="zone-merch" style="top: 37%; left: 80%; width: 16%; height: 20%;"></div>
 			<div class="map-box" id="zone-registration" style="top: 72%; left: 10%; width: 16%; height: 19%;"></div>
