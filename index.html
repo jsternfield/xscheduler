@@ -181,6 +181,14 @@
       color: #ffffff;
     }
 
+	/* Sticky wrapper inside merged cells */
+	.event-cell span, .prime-cell span {
+	  position: sticky;
+	  left: 20vw; /* Keep aligned with column width (th:first-child width) */
+	  display: inline-block;
+	  white-space: nowrap;
+	}
+
     tr:hover td {
       background-color: #26334d;
     }
@@ -981,39 +989,38 @@
   <script>
 	  const DEFAULT_SCALE = 2.5;
 
-	  function mergeAdjacentCells() {
-		  document.querySelectorAll('tbody tr').forEach(row => {
-		    // Select data cells excluding the row header th
-		    const cells = Array.from(row.querySelectorAll('td'));
-		    
-		    for (let i = 0; i < cells.length; i++) {
-		      const currentCell = cells[i];
-		      // Skip empty marker cells or already removed cells
-		      if (!currentCell || currentCell.textContent.trim() === '—') continue;
+	function mergeAdjacentCells() {
+	  document.querySelectorAll('tbody tr').forEach(row => {
+	    const cells = Array.from(row.querySelectorAll('td'));
+	    
+	    for (let i = 0; i < cells.length; i++) {
+	      const currentCell = cells[i];
+	      if (!currentCell || currentCell.textContent.trim() === '—') continue;
+	
+	      let colspan = 1;
+	      
+	      while (
+	        i + colspan < cells.length &&
+	        cells[i + colspan].textContent.trim() === currentCell.textContent.trim()
+	      ) {
+	        cells[i + colspan].remove();
+	        colspan++;
+	      }
+	
+	      if (colspan > 1) {
+	        currentCell.setAttribute('colspan', colspan);
+	        i += colspan - 1;
+	      }
+	
+	      // Wrap cell content in a span for sticky horizontal alignment
+	      const text = currentCell.textContent.trim();
+	      currentCell.innerHTML = `<span>${text}</span>`;
+	    }
+	  });
+	}
 		
-		      let colspan = 1;
-		      
-		      // Look ahead to find consecutive cells with identical text
-		      while (
-		        i + colspan < cells.length &&
-		        cells[i + colspan].textContent.trim() === currentCell.textContent.trim()
-		      ) {
-		        // Remove merged cell from DOM
-		        cells[i + colspan].remove();
-		        colspan++;
-		      }
-		
-		      // Apply total span if multiple cells were merged
-		      if (colspan > 1) {
-		        currentCell.setAttribute('colspan', colspan);
-		        i += colspan - 1; // Move index past the merged cells
-		      }
-		    }
-		  });
-		}
-		
-		// Execute cell merge on initial page load
-		document.addEventListener('DOMContentLoaded', mergeAdjacentCells);
+	// Execute cell merge on initial page load
+	document.addEventListener('DOMContentLoaded', mergeAdjacentCells);
 	
 	  // Map Pan/Zoom State
 	  let scale = 1;
