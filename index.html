@@ -160,7 +160,7 @@
     }
 
 	.prime-cell {
-	  color: #fef08a; /* Light yellow text */
+	  color: #ffffcc; /* Light yellow text */
 	  cursor: pointer;
 	  transition: background-color 0.2s ease;
 	}
@@ -413,7 +413,7 @@
           <tbody>
             <tr>
               <th data-zone="hall-d">Main Stage<br>(Hall D)</th>			  
-              <td class="event-cell">Opening Ceremony</td>
+              <td class="prime-cell">Opening Ceremony</td>
               <td class="event-cell">Opening Ceremony</td>
               <td class="event-cell">Opening Ceremony</td>
               <td class="event-cell">Opening Ceremony</td>
@@ -1057,20 +1057,18 @@
 	  }
 	
 	  // Handle schedule table cell clicks
-	  // Handle schedule table cell clicks
-document.querySelectorAll('.event-cell').forEach(cell => {
-  cell.addEventListener('click', function() {
-    const row = this.closest('tr');
-    const rowHeader = row.querySelector('th[data-zone]');
-    if (rowHeader) {
-      const zoneKey = rowHeader.getAttribute('data-zone');
-      if (zoneKey) {
-        zoomToZone(zoneKey);
-      }
-    }
-  });
-});
-
+	document.querySelectorAll('.event-cell, .prime-cell').forEach(cell => {
+	  cell.addEventListener('click', function() {
+	    const row = this.closest('tr');
+	    const rowHeader = row.querySelector('th[data-zone]');
+	    if (rowHeader) {
+	      const zoneKey = rowHeader.getAttribute('data-zone');
+	      if (zoneKey) {
+	        zoomToZone(zoneKey);
+	      }
+	    }
+	  });
+	});
 	
 	  function resetMapZoom() {
 	    scale = 1;
