@@ -105,22 +105,29 @@
     }
 
     .table-wrapper.active {
-      display: block;
+      display: flex; /* Changed from block to flex so table stretches vertically */
+  	  flex-direction: column;
     }
 
     table {
       width: 100%;
+	  height: 100%; /* Spans full height of wrapper */
       border-collapse: separate;
       border-spacing: 0;
-      min-width: 750px;
+      min-width: 800px;
     }
 
+	/* Distribute available vertical space evenly across all 6 rows */
+	tbody tr {
+	  height: 16.66%; 
+	}
+
     th, td {
-      padding: 12px 16px;
+      padding: 6px 12px;
       text-align: left;
       border-bottom: 1px solid var(--border-color);
       border-right: 1px solid var(--border-color);
-      font-size: 1rem;
+      font-size: 0.85rem;
 	  min-width: 30vw; /* Sets each time slot column to X% of viewport width */
     }
 
@@ -356,260 +363,578 @@
           <thead>
             <tr>
               <th>Stage / Zone</th>
-              <th>10:30–11:45 AM</th>
-              <th>12:00–12:45 PM</th>
-              <th>1:00–1:45 PM</th>
-              <th>1:45–2:30 PM</th>
-              <th>2:00–2:45 PM</th>
-              <th>2:30–3:15 PM</th>
-              <th>2:45–3:30 PM</th>
-              <th>3:00–3:45 PM</th>
-              <th>3:30–4:15 PM</th>
-              <th>3:45–4:30 PM</th>
-              <th>4:15–5:15 PM</th>
-              <th>4:45–7:00 PM</th>
-              <th>5:30–6:30 PM</th>
+				<th>10:30 AM</th>
+				<th>10:45 AM</th>
+				<th>11:00 AM</th>
+				<th>11:15 AM</th>
+				<th>11:30 AM</th>
+				<th>11:45 AM</th>
+				<th>12:00 PM</th>
+				<th>12:15 PM</th>
+				<th>12:30 PM</th>
+				<th>12:45 PM</th>
+				<th>1:00 PM</th>
+				<th>1:15 PM</th>
+				<th>1:30 PM</th>
+				<th>1:45 PM</th>
+				<th>2:00 PM</th>
+				<th>2:15 PM</th>
+				<th>2:30 PM</th>
+				<th>2:45 PM</th>
+				<th>3:00 PM</th>
+				<th>3:15 PM</th>
+				<th>3:30 PM</th>
+				<th>3:45 PM</th>
+				<th>4:00 PM</th>
+				<th>4:15 PM</th>
+				<th>4:30 PM</th>
+				<th>4:45 PM</th>
+				<th>5:00 PM</th>
+				<th>5:15 PM</th>
+				<th>5:30 PM</th>
+				<th>5:45 PM</th>
+				<th>6:00 PM</th>
+				<th>6:15 PM</th>
+				<th>6:30 PM</th>
+				<th>6:45 PM</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th data-zone="hall-d">Main Stage (Hall D)</th>
-              <td class="event-cell">Opening Ceremony</td>
-              <td class="event-cell">World of Warcraft: What's Next</td>
+              <th data-zone="hall-d">Main Stage (Hall D)</th>			  
+              <td class="empty-cell">Opening Ceremony</td>
+              <td class="empty-cell">Opening Ceremony</td>
+              <td class="empty-cell">Opening Ceremony</td>
+              <td class="empty-cell">Opening Ceremony</td>
+              <td class="empty-cell">Opening Ceremony</td>
               <td class="empty-cell">—</td>
-              <td class="event-cell">Diablo: Developer Update</td>
+              <td class="empty-cell">World of Warcraft: What's Next</td>
+              <td class="empty-cell">World of Warcraft: What's Next</td>
+              <td class="empty-cell">World of Warcraft: What's Next</td>
               <td class="empty-cell">—</td>
               <td class="empty-cell">—</td>
-              <td class="event-cell">WoW: What's Next II</td>
               <td class="empty-cell">—</td>
               <td class="empty-cell">—</td>
-              <td class="event-cell">Overwatch: Hero Deep Dive</td>
+              <td class="empty-cell">Diablo: Developer Update</td>
+              <td class="empty-cell">Diablo: Developer Update</td>
+              <td class="empty-cell">Diablo: Developer Update</td>
               <td class="empty-cell">—</td>
-              <td class="event-cell">BlizzCon Community Night</td>
+              <td class="empty-cell">WoW: What's Next II</td>
+              <td class="empty-cell">WoW: What's Next II</td>
+              <td class="empty-cell">WoW: What's Next II</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">Overwatch: Hero Deep Dive</td>
+              <td class="empty-cell">Overwatch: Hero Deep Dive</td>
+              <td class="empty-cell">Overwatch: Hero Deep Dive</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">BlizzCon Community Night</td>
+              <td class="empty-cell">BlizzCon Community Night</td>
+              <td class="empty-cell">BlizzCon Community Night</td>
+              <td class="empty-cell">BlizzCon Community Night</td>
+              <td class="empty-cell">BlizzCon Community Night</td>
+              <td class="empty-cell">BlizzCon Community Night</td>
+              <td class="empty-cell">BlizzCon Community Night</td>
+              <td class="empty-cell">BlizzCon Community Night</td>
+              <td class="empty-cell">BlizzCon Community Night</td>
+            </tr>
+			<tr>
+              <th data-zone="legends">Legends Stage (2F)</th>
+			  <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">OW Dev Livestream</td>
+              <td class="empty-cell">OW Dev Livestream</td>
+              <td class="empty-cell">OW Dev Livestream</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">TrailerCraft</td>
+              <td class="empty-cell">TrailerCraft</td>
+              <td class="empty-cell">TrailerCraft</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">Building Cutscenes in WoW</td>
+              <td class="empty-cell">Building Cutscenes in WoW</td>
+              <td class="empty-cell">Building Cutscenes in WoW</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">The World of Blizzard Sound Design</td>
+              <td class="empty-cell">The World of Blizzard Sound Design</td>
+              <td class="empty-cell">The World of Blizzard Sound Design</td>
+              <td class="empty-cell">The World of Blizzard Sound Design</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">The Art of Darkness: Diablo IV Cinematics</td>
+              <td class="empty-cell">The Art of Darkness: Diablo IV Cinematics</td>
+              <td class="empty-cell">The Art of Darkness: Diablo IV Cinematics</td>
+              <td class="empty-cell">The Art of Darkness: Diablo IV Cinematics</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">Kinda Funny Live from BlizzCon</td>
+              <td class="empty-cell">Kinda Funny Live from BlizzCon</td>
+              <td class="empty-cell">Kinda Funny Live from BlizzCon</td>
+              <td class="empty-cell">Kinda Funny Live from BlizzCon</td>
+              <td class="empty-cell">—</td>
               <td class="empty-cell">—</td>
             </tr>
             <tr>
               <th data-zone="hall-c">WoW Stage (Hall C)</th>
               <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
               <td class="empty-cell">—</td>
               <td class="empty-cell">—</td>
               <td class="empty-cell">—</td>
               <td class="empty-cell">—</td>
+              <td class="empty-cell">MDI 2026 Grand Finals</td>
+              <td class="empty-cell">MDI 2026 Grand Finals</td>
+              <td class="empty-cell">MDI 2026 Grand Finals</td>
+              <td class="empty-cell">MDI 2026 Grand Finals</td>
+              <td class="empty-cell">MDI 2026 Grand Finals</td>
+              <td class="empty-cell">MDI 2026 Grand Finals</td>
+              <td class="empty-cell">MDI 2026 Grand Finals</td>
+              <td class="empty-cell">MDI 2026 Grand Finals</td>
+              <td class="empty-cell">MDI 2026 Grand Finals</td>
+              <td class="empty-cell">MDI 2026 Grand Finals</td>
               <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
+              <td class="empty-cell">WoW: Developer x Creator Showcase</td>
+              <td class="empty-cell">WoW: Developer x Creator Showcase</td>
+              <td class="empty-cell">WoW: Developer x Creator Showcase</td>
+              <td class="empty-cell">WoW: Developer x Creator Showcase</td>
+              <td class="empty-cell">WoW: Developer x Creator Showcase</td>
+              <td class="empty-cell">WoW: Developer x Creator Showcase</td>
+              <td class="empty-cell">WoW: Developer x Creator Showcase</td>
+              <td class="empty-cell">WoW: Developer x Creator Showcase</td>
+              <td class="empty-cell">MDI 2026 Grand Finals Championship Match</td>
+			  <td class="empty-cell">MDI 2026 Grand Finals Championship Match</td>
+			  <td class="empty-cell">MDI 2026 Grand Finals Championship Match</td>
+			  <td class="empty-cell">MDI 2026 Grand Finals Championship Match</td>
+			  <td class="empty-cell">MDI 2026 Grand Finals Championship Match</td>
+			  <td class="empty-cell">MDI 2026 Grand Finals Championship Match</td>
             </tr>
             <tr>
               <th data-zone="hall-b">Hearthstone Stage (Hall B)</th>
               <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">Hearthstone: What's Next</td>
+              <td class="empty-cell">Hearthstone: What's Next</td>
+              <td class="empty-cell">Hearthstone: What's Next</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
+              <td class="empty-cell">HS World Championship Quarterfinals</td>
               <td class="empty-cell">—</td>
               <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="event-cell">Hearthstone: What's Next</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
+              <td class="event-cell">Drawstone: Murloc Draw Along</td>
+              <td class="event-cell">Drawstone: Murloc Draw Along</td>
             </tr>
             <tr>
               <th data-zone="hall-a">Classic Cup Stage (Hall A)</th>
               <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="event-cell">Custodians of Legacy Games</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="event-cell">Classic Game Deep Dive</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-            </tr>
-			<tr>
-              <th data-zone="legends">Legends Stage (2F)</th>
               <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
-              <td class="event-cell">OW Dev Livestream: Live from BlizzCon!</td>
-              <td class="event-cell">TrailerCraft</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
               <td class="empty-cell">—</td>
-              <td class="event-cell">Building Cutscenes in WoW</td>
+              <td class="empty-cell">Classic Cup: HOTS</td>
+              <td class="empty-cell">Classic Cup: HOTS</td>
+              <td class="empty-cell">Classic Cup: HOTS</td>
+              <td class="empty-cell">Classic Cup: HOTS</td>
+              <td class="empty-cell">Classic Cup: HOTS</td>
+              <td class="empty-cell">Classic Cup: HOTS</td>
+              <td class="empty-cell">Classic Cup: HOTS</td>
+              <td class="empty-cell">Classic Cup: HOTS</td>
+              <td class="empty-cell">Classic Cup: HOTS</td>
               <td class="empty-cell">—</td>
+              <td class="empty-cell">Custodians of Legacy Games</td>
+              <td class="empty-cell">Custodians of Legacy Games</td>
+              <td class="empty-cell">Custodians of Legacy Games</td>
               <td class="empty-cell">—</td>
-              <td class="event-cell">Sound Design</td>
+              <td class="empty-cell">Classic Game Deep Dive</td>
+              <td class="empty-cell">Classic Game Deep Dive</td>
+              <td class="empty-cell">Classic Game Deep Dive</td>
               <td class="empty-cell">—</td>
+              <td class="empty-cell">Classic Cup: Warcraft III</td>
+              <td class="empty-cell">Classic Cup: Warcraft III</td>
+              <td class="empty-cell">Classic Cup: Warcraft III</td>
+              <td class="empty-cell">Classic Cup: Warcraft III</td>
+              <td class="empty-cell">Classic Cup: Warcraft III</td>
+              <td class="empty-cell">Classic Cup: Warcraft III</td>
+              <td class="empty-cell">Classic Cup: Warcraft III</td>
+              <td class="empty-cell">Classic Cup: Warcraft III</td>
+              <td class="empty-cell">Classic Cup: Warcraft III</td>
               <td class="empty-cell">—</td>
-              <td class="event-cell">The Art of Darkness: Diablo IV Cinematics</td>
-              <td class="empty-cell">—</td>
-              <td class="event-cell">Kinda Funny Live from BlizzCon</td>
             </tr>
             <tr>
               <th data-zone="arena">OW Arena</th>
               <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
-              <td class="event-cell">OW World Cup Group Stage</td>
-              <td class="event-cell">OW World Cup Group Stage</td>
-              <td class="event-cell">OW World Cup Group Stage</td>
-              <td class="event-cell">OW World Cup Group Stage</td>
-              <td class="event-cell">OW World Cup Group Stage</td>
-              <td class="event-cell">OW World Cup Group Stage</td>
-              <td class="event-cell">OW World Cup Group Stage</td>
-              <td class="event-cell">OW World Cup Group Stage</td>
-              <td class="event-cell">OW World Cup Group Stage</td>
-              <td class="event-cell">OW World Cup Group Stage</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
+              <td class="event-cell simulcast">Opening Ceremony (Simulcast)</td>
               <td class="empty-cell">—</td>
+              <td class="event-cell">OW World Cup Quarterfinals 1</td>
+              <td class="event-cell">OW World Cup Quarterfinals 1</td>
+              <td class="event-cell">OW World Cup Quarterfinals 1</td>
+              <td class="event-cell">OW World Cup Quarterfinals 1</td>
+              <td class="event-cell">OW World Cup Quarterfinals 1</td>
+              <td class="event-cell">OW World Cup Quarterfinals 1</td>
+              <td class="event-cell">OW World Cup Quarterfinals 2</td>
+              <td class="event-cell">OW World Cup Quarterfinals 2</td>
+              <td class="event-cell">OW World Cup Quarterfinals 2</td>
+              <td class="event-cell">OW World Cup Quarterfinals 2</td>
+              <td class="event-cell">OW World Cup Quarterfinals 2</td>
+              <td class="event-cell">OW World Cup Quarterfinals 2</td>
+              <td class="event-cell">OW World Cup Quarterfinals 3</td>
+              <td class="event-cell">OW World Cup Quarterfinals 3</td>
+              <td class="event-cell">OW World Cup Quarterfinals 3</td>
+              <td class="event-cell">OW World Cup Quarterfinals 3</td>
+              <td class="event-cell">OW World Cup Quarterfinals 3</td>
+              <td class="event-cell">OW World Cup Quarterfinals 3</td>
+              <td class="event-cell">OW World Cup Quarterfinals 4</td>
+              <td class="event-cell">OW World Cup Quarterfinals 4</td>
+              <td class="event-cell">OW World Cup Quarterfinals 4</td>
+              <td class="event-cell">OW World Cup Quarterfinals 4</td>
+              <td class="event-cell">OW World Cup Quarterfinals 4</td>
+              <td class="event-cell">OW World Cup Quarterfinals 4</td>
               <td class="empty-cell">—</td>
+              <td class="empty-cell">Overwatch Art & Collaboration Deep Dive</td>
+              <td class="empty-cell">Overwatch Art & Collaboration Deep Dive</td>
+              <td class="empty-cell">Overwatch Art & Collaboration Deep Dive</td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <!-- DAY 2 SCHEDULE -->
-      <div id="day2" class="table-wrapper">
+      	<div id="day2" class="table-wrapper">
         <table>
           <thead>
             <tr>
               <th>Stage / Zone</th>
-              <th>9:30–10:30 AM</th>
-              <th>10:00–10:45 AM</th>
-              <th>10:45–11:30 AM</th>
-              <th>11:00–11:45 AM</th>
-              <th>11:45 AM–12:30 PM</th>
-              <th>12:00–2:00 PM</th>
-              <th>12:45–1:45 PM</th>
-              <th>2:00–2:45 PM</th>
-              <th>2:15–3:00 PM</th>
-              <th>3:00–3:45 PM</th>
-              <th>3:15–4:00 PM</th>
-              <th>3:15–5:30 PM</th>
-              <th>4:00–4:45 PM</th>
-              <th>4:15–5:00 PM</th>
-              <th>5:30–5:45 PM</th>
-              <th>6:00–7:00 PM</th>
+				<th>9:00 AM</th>
+				<th>9:15 AM</th>
+				<th>9:30 AM</th>
+				<th>9:45 AM</th>
+				<th>10:00 AM</th>
+				<th>10:15 AM</th>
+				<th>10:30 AM</th>
+				<th>10:45 AM</th>
+				<th>11:00 AM</th>
+				<th>11:15 AM</th>
+				<th>11:30 AM</th>
+				<th>11:45 AM</th>
+				<th>12:00 PM</th>
+				<th>12:15 PM</th>
+				<th>12:30 PM</th>
+				<th>12:45 PM</th>
+				<th>1:00 PM</th>
+				<th>1:15 PM</th>
+				<th>1:30 PM</th>
+				<th>1:45 PM</th>
+				<th>2:00 PM</th>
+				<th>2:15 PM</th>
+				<th>2:30 PM</th>
+				<th>2:45 PM</th>
+				<th>3:00 PM</th>
+				<th>3:15 PM</th>
+				<th>3:30 PM</th>
+				<th>3:45 PM</th>
+				<th>4:00 PM</th>
+				<th>4:15 PM</th>
+				<th>4:30 PM</th>
+				<th>4:45 PM</th>
+				<th>5:00 PM</th>
+				<th>5:15 PM</th>
+				<th>5:30 PM</th>
+				<th>5:45 PM</th>
+				<th>6:00 PM</th>
+				<th>6:15 PM</th>
+				<th>6:30 PM</th>
+				<th>6:45 PM</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <th data-zone="hall-d">Main Stage (Hall D)</th>
               <td class="empty-cell">—</td>
-              <td class="event-cell">World of Warcraft: Deep Dive</td>
+			  <td class="empty-cell">—</td>
+			  <td class="empty-cell">—</td>
+			  <td class="empty-cell">—</td>
+              <td class="event-cell">WoW: Deep Dive</td>
+			  <td class="event-cell">WoW: Deep Dive</td>
+			  <td class="event-cell">WoW: Deep Dive</td>
               <td class="empty-cell">—</td>
               <td class="event-cell">Diablo IV: What's Next</td>
+			  <td class="event-cell">Diablo IV: What's Next</td>
+			  <td class="event-cell">Diablo IV: What's Next</td>
               <td class="empty-cell">—</td>
               <td class="event-cell">QuestWatch: Live!!!</td>
+			  <td class="event-cell">QuestWatch: Live!!!</td>
+			  <td class="event-cell">QuestWatch: Live!!!</td>
+			  <td class="event-cell">QuestWatch: Live!!!</td>
+			  <td class="event-cell">QuestWatch: Live!!!</td>
+			  <td class="event-cell">QuestWatch: Live!!!</td>
+			  <td class="event-cell">QuestWatch: Live!!!</td>
+			  <td class="event-cell">QuestWatch: Live!!!</td>
               <td class="empty-cell">—</td>
               <td class="empty-cell">—</td>
-              <td class="event-cell">World of Warcraft: Design Deep Dive</td>
-              <td class="empty-cell">—</td>
+              <td class="event-cell">WoW: Design Deep Dive</td>
+			  <td class="event-cell">WoW: Design Deep Dive</td>
+			  <td class="event-cell">WoW: Design Deep Dive</td>
               <td class="empty-cell">—</td>
               <td class="event-cell">Voices of Blizzard</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
+			  <td class="event-cell">Voices of Blizzard</td>
+			  <td class="event-cell">Voices of Blizzard</td>
+			  <td class="event-cell">Voices of Blizzard</td>
+			  <td class="event-cell">Voices of Blizzard</td>
+			  <td class="event-cell">Voices of Blizzard</td>
+			  <td class="event-cell">Voices of Blizzard</td>
+			  <td class="event-cell">Voices of Blizzard</td>
+			  <td class="event-cell">Voices of Blizzard</td>
               <td class="event-cell">Closing Remarks</td>
-              <td class="event-cell">LE SSERAFIM Live Performance</td>
+              <td class="empty-cell">—</td>
+              <td class="event-cell">LE SSERAFIM</td>
+			  <td class="event-cell">LE SSERAFIM</td>
+			  <td class="event-cell">LE SSERAFIM</td>
+			  <td class="event-cell">LE SSERAFIM</td>
             </tr>
             <tr>
               <th data-zone="legends">Legends Stage (2nd Fl)</th>
-              <td class="event-cell">30 Years of Battle.net (w/ CDPR)</td>
+              <td class="empty-cell">—</td>
+			  <td class="empty-cell">—</td>
+			  <td class="event-cell">30 Years of Battle.net (w/ CDPR)</td>
+			  <td class="event-cell">30 Years of Battle.net (w/ CDPR)</td>
+			  <td class="event-cell">30 Years of Battle.net (w/ CDPR)</td>
+			  <td class="event-cell">30 Years of Battle.net (w/ CDPR)</td>
               <td class="empty-cell">—</td>
               <td class="event-cell">WoW: Crafting Coziness & Freedom</td>
+			  <td class="event-cell">WoW: Crafting Coziness & Freedom</td>
+			  <td class="event-cell">WoW: Crafting Coziness & Freedom</td>
               <td class="empty-cell">—</td>
-              <td class="event-cell">World Building in World of Warcraft</td>
+              <td class="event-cell">World Building in WoW</td>
+			  <td class="event-cell">World Building in WoW</td>
+			  <td class="event-cell">World Building in WoW</td>
               <td class="empty-cell">—</td>
               <td class="event-cell">Villains of Blizzard</td>
+			  <td class="event-cell">Villains of Blizzard</td>
+			  <td class="event-cell">Villains of Blizzard</td>
+			  <td class="event-cell">Villains of Blizzard</td>
+              <td class="empty-cell">—</td>
               <td class="event-cell">Collaborative Storytelling in SFD</td>
+			  <td class="event-cell">Collaborative Storytelling in SFD</td>
+			  <td class="event-cell">Collaborative Storytelling in SFD</td>
               <td class="empty-cell">—</td>
-              <td class="event-cell">OW Dev Livestream: Live from BlizzCon!</td>
-              <td class="empty-cell">—</td>
+              <td class="event-cell">OW Dev Livestream: Live!</td>
+			  <td class="event-cell">OW Dev Livestream: Live!</td>
+			  <td class="event-cell">OW Dev Livestream: Live!</td>
               <td class="empty-cell">—</td>
               <td class="event-cell">Localization: Bringing Worlds Together</td>
+			  <td class="event-cell">Localization: Bringing Worlds Together</td>
+			  <td class="event-cell">Localization: Bringing Worlds Together</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">—</td>
+              <td class="empty-cell">—</td>
               <td class="empty-cell">—</td>
               <td class="empty-cell">—</td>
               <td class="empty-cell">—</td>
             </tr>
             <tr>
               <th data-zone="hall-c">WoW Stage (Hall C)</th>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="event-cell">WoW Hardcore: What's Next</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
+				<td class="event-cell">-</td>
+				<td class="event-cell">-</td>
+				<td class="event-cell">-</td>
+				<td class="event-cell">-</td>
+				<td class="event-cell">-</td>
+				<td class="event-cell">-</td>
+				<td class="event-cell">-</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">-</td>
+				<td class="event-cell">WoW: Art Design</td>
+				<td class="event-cell">WoW: Art Design</td>
+				<td class="event-cell">WoW: Art Design</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">AWC 2026 Grand Finals</td>
+				<td class="event-cell">-</td>
+				<td class="event-cell">WoW Hardcore: What's Next</td>
+				<td class="event-cell">WoW Hardcore: What's Next</td>
+				<td class="event-cell">WoW Hardcore: What's Next</td>
+				<td class="empty-cell">AWC 2026 Championship Match</td>
+				<td class="empty-cell">AWC 2026 Championship Match</td>
+				<td class="empty-cell">AWC 2026 Championship Match</td>
+				<td class="empty-cell">AWC 2026 Championship Match</td>
+				<td class="empty-cell">AWC 2026 Championship Match</td>
+				<td class="empty-cell">AWC 2026 Championship Match</td>
+				<td class="empty-cell">AWC 2026 Trophy Ceremony</td>
+				<td class="empty-cell">—</td>
             </tr>
             <tr>
               <th data-zone="hall-b">Hearthstone Stage (Hall B)</th>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="event-cell">Hearthstone: Battlegrounds Design</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
+				<td class="event-cell">-</td>
+				<td class="event-cell">-</td>
+				<td class="event-cell">-</td>
+				<td class="event-cell">HS World Championship Semifinals</td>
+				<td class="event-cell">HS World Championship Semifinals</td>
+				<td class="event-cell">HS World Championship Semifinals</td>
+				<td class="event-cell">HS World Championship Semifinals</td>
+				<td class="event-cell">HS World Championship Semifinals</td>
+				<td class="event-cell">HS World Championship Semifinals</td>
+				<td class="event-cell">HS World Championship Semifinals</td>
+				<td class="event-cell">HS World Championship Semifinals</td>
+				<td class="event-cell">HS World Championship Semifinals</td>
+				<td class="event-cell">HS World Championship Semifinals</td>
+				<td class="event-cell">HS World Championship Semifinals</td>
+				<td class="event-cell">HS World Championship Semifinals</td>
+				<td class="event-cell">HS World Championship Semifinals</td>
+				<td class="event-cell">HS World Championship Finals</td>
+				<td class="event-cell">HS World Championship Finals</td>
+				<td class="event-cell">HS World Championship Finals</td>
+				<td class="event-cell">HS World Championship Finals</td>
+				<td class="event-cell">HS World Championship Finals</td>
+				<td class="event-cell">HS World Championship Finals</td>
+				<td class="event-cell">HS World Championship Finals</td>
+				<td class="event-cell">HS Trophy Ceremony</td>
+				<td class="event-cell">-</td>
+				<td class="event-cell">Hearthstone: Battlegrounds Design</td>
+				<td class="event-cell">Hearthstone: Battlegrounds Design</td>
+				<td class="event-cell">Hearthstone: Battlegrounds Design</td>
+				<td class="event-cell">-</td>
+				<td class="event-cell">DrawStone: Card Back Art Demo</td>
+				<td class="event-cell">DrawStone: Card Back Art Demo</td>
+				<td class="event-cell">DrawStone: Card Back Art Demo</td>
+				<td class="empty-cell">-</td>
+				<td class="empty-cell">—</td>
+				<td class="empty-cell">—</td>
+				<td class="empty-cell">—</td>
+				<td class="empty-cell">—</td>
+				<td class="empty-cell">—</td>
+				<td class="empty-cell">—</td>
+				<td class="empty-cell">—</td>
             </tr>
             <tr>
               <th data-zone="hall-a">Classic Cup Stage (Hall A)</th>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
+				<td class="event-cell">RSL Revival: S6 Finals</td>
+				<td class="event-cell">RSL Revival: S6 Finals</td>
+				<td class="event-cell">RSL Revival: S6 Finals</td>
+				<td class="event-cell">RSL Revival: S6 Finals</td>
+				<td class="event-cell">RSL Revival: S6 Finals</td>
+				<td class="event-cell">RSL Revival: S6 Finals</td>
+				<td class="event-cell">RSL Revival: S6 Finals</td>
+				<td class="event-cell">RSL Revival: S6 Finals</td>
+				<td class="event-cell">RSL Revival: S6 Finals</td>
+				<td class="event-cell">RSL Revival: S6 Finals</td>
+				<td class="event-cell">Classic Cup: SCII - Legacy Match</td>
+				<td class="event-cell">Classic Cup: SCII - Legacy Match</td>
+				<td class="event-cell">Classic Cup: SCII - Legacy Match</td>
+				<td class="event-cell">Classic Cup: SCII - Legacy Match</td>
+				<td class="event-cell">Classic Cup: SCII - Legacy Match</td>
+				<td class="event-cell">Classic Cup: SCII - Legacy Match</td>
+				<td class="event-cell">Classic Cup: SCII - Legacy Match</td>
+				<td class="event-cell">Classic Cup: StarCraft II</td>
+				<td class="event-cell">Classic Cup: StarCraft II</td>
+				<td class="event-cell">Classic Cup: StarCraft II</td>
+				<td class="event-cell">Classic Cup: StarCraft II</td>
+				<td class="event-cell">Classic Cup: StarCraft Remastered</td
+				<td class="event-cell">Classic Cup: StarCraft Remastered</td>
+				<td class="event-cell">Classic Cup: StarCraft Remastered</td>
+				<td class="event-cell">Classic Cup: StarCraft Remastered</td>
+				<td class="event-cell">Classic Cup: SC Remastered - Legacy Match</td>
+				<td class="event-cell">Classic Cup: SC Remastered - Legacy Match</td>
+				<td class="event-cell">Classic Cup: SC Remastered - Legacy Match</td>
+				<td class="event-cell">Classic Cup: SC Remastered - Legacy Match</td>
+				<td class="event-cell">Classic Cup: SC Remastered - Legacy Match</td>
+				<td class="event-cell">Classic Cup: SC Remastered - Legacy Match</td>
+				<td class="empty-cell">Classic Cup Trophy Ceremony</td>
+				<td class="empty-cell">-</td>
+				<td class="empty-cell">—</td>
+				<td class="empty-cell">—</td>
+				<td class="empty-cell">—</td>
+				<td class="empty-cell">—</td>
+				<td class="empty-cell">—</td>
+				<td class="empty-cell">—</td>
+				<td class="empty-cell">—</td>
             </tr>
             <tr>
               <th data-zone="arena">OW Arena</th>
+              <td class="event-cell">OW World Cup Semifinals 1</td>
+			  <td class="event-cell">OW World Cup Semifinals 1</td>
+			  <td class="event-cell">OW World Cup Semifinals 1</td>
+			  <td class="event-cell">OW World Cup Semifinals 1</td>
+			  <td class="event-cell">OW World Cup Semifinals 1</td>
+			  <td class="event-cell">OW World Cup Semifinals 1</td>
+			  <td class="event-cell">OW World Cup Semifinals 1</td>
+              <td class="event-cell">OW World Cup Semifinals 2</td>
+			  <td class="event-cell">OW World Cup Semifinals 2</td>
+			  <td class="event-cell">OW World Cup Semifinals 2</td>
+			  <td class="event-cell">OW World Cup Semifinals 2</td>
+			  <td class="event-cell">OW World Cup Semifinals 2</td>
+			  <td class="event-cell">OW World Cup Semifinals 2</td>
+			  <td class="event-cell">OW World Cup Halftime Show</td>
+			  <td class="event-cell">OW World Cup Halftime Show</td>
+			  <td class="event-cell">OW World Cup Halftime Show</td>
+			  <td class="event-cell">OW World Cup Halftime Show</td>
+              <td class="event-cell">OW World Cup Thid-Place Match</td>
+			  <td class="event-cell">OW World Cup Thid-Place Match</td>
+			  <td class="event-cell">OW World Cup Thid-Place Match</td>
+			  <td class="event-cell">OW World Cup Thid-Place Match</td>
+			  <td class="event-cell">OW World Cup Thid-Place Match</td>
+			  <td class="event-cell">OW World Cup Thid-Place Match</td>
+              <td class="event-cell">OW World Cup Finals</td>
+              <td class="event-cell">OW World Cup Finals</td>
+              <td class="event-cell">OW World Cup Finals</td>
+              <td class="event-cell">OW World Cup Finals</td>
+              <td class="event-cell">OW World Cup Finals</td>
+              <td class="event-cell">OW World Cup Finals</td>
+			  <td class="event-cell">OW World Cup Finals</td>
+			  <td class="event-cell">OW World Cup Finals</td>
+              <td class="empty-cell">OW Trophy Ceremony</td>
+              <td class="empty-cell">OW Post Show</td>
               <td class="empty-cell">—</td>
-              <td class="event-cell">OW World Cup Finals</td>
-              <td class="event-cell">OW World Cup Finals</td>
-              <td class="event-cell">OW World Cup Finals</td>
-              <td class="event-cell">OW World Cup Finals</td>
-              <td class="event-cell">OW World Cup Finals</td>
-              <td class="event-cell">OW World Cup Finals</td>
-              <td class="event-cell">OW World Cup Finals</td>
-              <td class="event-cell">OW World Cup Finals</td>
-              <td class="event-cell">OW World Cup Finals</td>
               <td class="empty-cell">—</td>
               <td class="empty-cell">—</td>
               <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
-              <td class="empty-cell">—</td>
+			  <td class="empty-cell">—</td>
+			  <td class="empty-cell">—</td>
+			  <td class="empty-cell">—</td>
             </tr>
           </tbody>
         </table>
