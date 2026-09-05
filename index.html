@@ -123,7 +123,7 @@
 	}
 
     th, td {
-      padding: 6px 12px;
+      padding: 6px 0px;
       text-align: left;
       border-bottom: 1px solid var(--border-color);
       border-right: 1px solid var(--border-color);
@@ -152,6 +152,7 @@
       min-width: 100px;
       font-weight: bold;
       color: var(--accent-blue);
+	  padding-left: 12px;
     }
 
     th:first-child {
@@ -184,9 +185,10 @@
 	/* Sticky wrapper inside merged cells */
 	.event-cell span, .prime-cell span {
 	  position: sticky;
-	  left: 21vw; /* Keep aligned with column width (th:first-child width) */
-	  display: inline-block;
+	  left: 0; /* not relative */
+	  display: block;
 	  white-space: nowrap;
+	  padding-left: 12px;
 	}
 
     tr:hover td {
