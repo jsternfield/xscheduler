@@ -1,0 +1,367 @@
+:root {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent-blue: #00aaff;
+    --accent-gold: #ffb700;
+    --border-color: #334155;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100vh;
+    overflow: hidden;
+    touch-action: none;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    width: 100%;
+    max-width: 1200px;
+    margin-bottom: 8px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+h1 {
+    font-size: 1.5rem;
+    color: var(--accent-blue);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+
+.tab-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.tab-button {
+    background-color: var(--card-bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    padding: 6px 14px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .tab-button.active {
+        background-color: var(--accent-blue);
+        color: #000;
+        border-color: var(--accent-blue);
+    }
+
+.main-layout {
+    width: 100%;
+    max-width: 1200px;
+    height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* TOP SCHEDULE CONTAINER */
+.schedule-area {
+    height: 50vh;
+    flex-shrink: 0;
+}
+
+.table-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    touch-action: pan-x pan-y;
+    display: none;
+}
+
+    .table-wrapper.active {
+        display: flex; /* Changed from block to flex so table stretches vertically */
+        flex-direction: column;
+    }
+
+table {
+    width: 100%;
+    height: 100%; /* Spans full height of wrapper */
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 800px;
+    display: table;
+}
+
+/* Distribute available vertical space evenly across all 6 rows */
+tbody tr {
+    height: 16.66%;
+}
+
+th, td {
+    padding: 6px 0px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    font-size: 0.85rem;
+    min-width: 30vw; /* Sets each time slot column to X% of viewport width */
+}
+
+th {
+    background-color: #0b1120;
+    color: var(--accent-gold);
+    font-weight: 700;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+    th:first-child, td:first-child {
+        position: sticky;
+        left: 0;
+        background-color: #111827;
+        z-index: 1;
+        width: 120px;
+        min-width: 100px;
+        font-weight: bold;
+        color: var(--accent-blue);
+        padding: 6px 12px;
+    }
+
+    th:first-child {
+        z-index: 3;
+        background-color: #050b14;
+    }
+
+.prime-cell {
+    color: #ffffff; /* white text */
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .prime-cell:hover {
+        background-color: #1e3a8a !important;
+        color: #ffffff;
+    }
+
+.event-cell {
+    color: #dadada; /* Light grey text */
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .event-cell:hover {
+        background-color: #1e3a8a !important;
+        color: #ffffff;
+    }
+
+    /* Sticky wrapper inside merged cells */
+    .event-cell span, .prime-cell span {
+        position: sticky;
+        left: 120px; /* not relative, lock exactly to first col width */
+        display: inline-block;
+        white-space: normal; /* allow text wrapping */
+        max-width: 36vw; /* equal to X cells (30 each) */
+    }
+
+tr:hover td {
+    background-color: #26334d;
+}
+
+.empty-cell {
+    color: #617085; /* Light blue grey */
+    text-align: center;
+    cursor: default;
+}
+
+.simulcast {
+    font-style: italic;
+}
+
+/* BOTTOM MAP CONTAINER */
+.map-wrapper {
+    position: relative;
+    width: 100%;
+    height: 30vh;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    user-select: none;
+}
+
+    .map-wrapper:active {
+        cursor: grabbing;
+    }
+
+.map-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-stage {
+    position: relative;
+    display: block;
+    width: 100%;
+    transform-origin: 0 0;
+    transition: transform 0.1s ease-out;
+    will-change: transform;
+}
+
+    .map-stage img {
+        display: block;
+        width: 100%;
+        height: auto;
+        pointer-events: none;
+    }
+
+/* CONTAINER: Tight wrapper matching image height */
+#map {
+    position: relative;
+    width: 100%;
+    height: auto; /* Replaces fixed height: 40vh */
+    overflow: hidden;
+    background-color: #000;
+    touch-action: none;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.map-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.map-box {
+    position: absolute;
+    border: 2px solid rgba(0, 170, 255, 0.6);
+    background-color: rgba(0, 170, 255, 0.15);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+    .map-box.active {
+        border-color: var(--accent-gold);
+        background-color: rgba(255, 183, 0, 0.35);
+        box-shadow: 0 0 15px var(--accent-gold);
+    }
+
+/* Anchor controls to the right side and stack buttons vertically */
+.map-controls {
+    position: absolute;
+    bottom: 10px;
+    right: 10px; /* Anchored to the right side */
+    z-index: 10;
+    display: flex;
+    flex-direction: column; /* Stacks fullscreen button above Reset Zoom */
+    gap: 6px;
+    align-items: flex-end;
+}
+
+.map-btn {
+    background: var(--card-bg);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control-row {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    align-items: center;
+}
+
+.fullscreen-btn svg {
+    display: block;
+}
+
+/* Dropdown Container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Menu Box */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--card-bg);
+    min-width: 150px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    z-index: 20;
+    margin-top: 4px;
+    overflow: hidden;
+}
+
+    /* Dropdown Item Links */
+    .dropdown-content a {
+        color: var(--text-main);
+        padding: 10px 14px;
+        text-decoration: none;
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: background-color 0.2s ease;
+    }
+
+        .dropdown-content a:hover {
+            background-color: var(--accent-blue);
+            color: #000;
+        }
+
+/* Display on Hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Highlight Parent Button when Active/Hovered */
+.dropdown:hover .dropdown-btn {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
