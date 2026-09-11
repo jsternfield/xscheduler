@@ -1,2 +1,2 @@
-# blizzcon2026
+# xscheduler
 Schedule and more for Blizzcon 2026
