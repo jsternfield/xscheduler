@@ -370,3 +370,21 @@ tr:hover td {
     display: none;
 }
 
+/* Container positioning for the pseudo-element overlay */
+.visibility-btn {
+    position: relative;
+}
+
+/* Red diagonal line overlay when toggled off */
+.visibility-btn.off::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 15%;
+    width: 70%;
+    height: 2px;
+    background-color: #ef4444; /* Red color stroke */
+    transform: translateY(-50%) rotate(-45deg);
+    pointer-events: none;
+    border-radius: 1px;
+}

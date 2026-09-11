@@ -646,7 +646,7 @@
           </button>
         </div>
         <div class="control-row">
-          <button class="map-btn visibility-btn" onclick="toggleMapOverlays()" title="Toggle Overlays">
+          <button class="map-btn visibility-btn" onclick="toggleMapOverlays(this)" title="Toggle Overlays">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
               <circle cx="12" cy="12" r="3" />
@@ -816,14 +816,14 @@
 		  }
 		});
 
-    function toggleMapOverlays() {
-	    const overlay = document.querySelector('.map-overlay');
-	    if (overlay) {
-	      overlay.classList.toggle('hidden');
-	    }
-	  }
+    function toggleMapOverlays(btn) {
+      const overlay = document.querySelector('.map-overlay');
+      if (overlay) {
+        overlay.classList.toggle('hidden');
+        btn.classList.toggle('off');
+      }
+    }
 
-	
 	  function resetMapZoom() {
 	    scale = 1;
 	    panX = 0;
