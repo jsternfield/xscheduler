@@ -365,3 +365,8 @@ tr:hover td {
     border-color: var(--accent-blue);
     color: var(--accent-blue);
 }
+
+.map-overlay.hidden {
+    display: none;
+}
+
